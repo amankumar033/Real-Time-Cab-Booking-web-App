@@ -3,7 +3,7 @@ const app=express();
 require("dotenv").config(); 
 const db=require("./db")
 const cors=require("cors")
-
+db();
 
 app.use(cors());
 app.set("view engine","ejs");
