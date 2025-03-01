@@ -18,7 +18,3 @@ if (!token) {
     req.user = user;
     return next();
   }
-    catch(err){
-        return res.status(401).json({ message: "You are not authorized" });
-    }
-}
