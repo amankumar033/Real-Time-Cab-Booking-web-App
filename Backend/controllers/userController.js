@@ -34,6 +34,8 @@ module.exports.loginUser = async (req,res,next)=>{
         return res.status(400).json({message:"Invalid Password"});
     }
     const token = user.generateAuthToken();
+    res.cookie('token', token)
+
     if(user && isMatch){
         res.json({token,user})
     }
@@ -41,3 +43,4 @@ module.exports.loginUser = async (req,res,next)=>{
 module.exports.getUserProfile = async (req,res,next)=>{
     res.json(req.user);
 }
+ 
