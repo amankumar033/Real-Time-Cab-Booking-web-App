@@ -17,3 +17,22 @@ module.exports.registerUser = async (req,res,next)=>{
     const token=await user.generateAuthToken();
     res.status(201).json({user,token});
 }
+module.exports.loginUser = async (req,res,next)=>{
+    const error=validationResult(req);
+    if(!error.isEmpty()){
+     return res.status(400).json({error:error.array()});
+    }
+    const {email,password}=req.body;
+    const user = await userModel.findOne({email}).select("+password");
+    if(!user){
+        return res.status(400).json({message:"User not found"});
+    }
+    const isMatch = await user.comparePassword(password);
+    if(!isMatch){
+        return res.status(400).json({message:"Invalid Password"});
+    }
+    const token = user.generateAuthToken();
+    if(user && isMatch){
+        res.json({token,user})
+    }
+}
