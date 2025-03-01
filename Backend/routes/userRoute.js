@@ -13,4 +13,5 @@ router.post("/login",[
     body('password').isLength({min:4}).withMessage('Password length must be grater than 3'),
 ],userController.loginUser)
 router.get("/profile",authMiddleware.authUser,userController.getUserProfile)
+router.get("/logout",authMiddleware.authUser,userController.logOutUser)
 module.exports=router;
