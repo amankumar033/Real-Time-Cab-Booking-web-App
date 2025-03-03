@@ -1,8 +1,8 @@
 const captainModel = require("../models/captainModel");
 
-module.exports.createCaptain = async({firstname,lastname, email, password, status, vehicle})=>{
-    if(!firstname || !email || !password || !status || !vehicle){
-        res.json("Incomplete Details")
+module.exports.createCaptain = async({firstname,lastname, email, password, status, vehicleType, capacity, color, plate})=>{
+    if(!firstname || !email || !password || !status || !vehicleType || !color || !plate || !capacity){
+        throw new Error('All fileds are required')
     }
      const captain = await captainModel.create({
       fullname:{
@@ -11,7 +11,10 @@ module.exports.createCaptain = async({firstname,lastname, email, password, statu
     email,
     password,
     status,
-    vehicle     
-     })
+    vehicleType,
+    capacity,
+    plate,
+    color
+     }) 
      return captain;
 }
