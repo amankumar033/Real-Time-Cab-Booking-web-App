@@ -31,19 +31,19 @@ module.exports.loginUser = async (req,res,next)=>{
      return res.status(400).json({error:error.array()});
     }
     const {email,password}=req.body;
-    const user = await userModel.findOne({email}).select("+password");
-    if(!user){
+    const captain = await userModel.findOne({email}).select("+password");
+    if(!captain){
         return res.status(400).json({message:"User not found"});
     }
-    const isMatch = await user.comparePassword(password);
+    const isMatch = await captain.comparePassword(password);
     if(!isMatch){
         return res.status(400).json({message:"Invalid Password"});
     }
-    const token = user.generateAuthToken();
+    const token = captain.generateAuthToken();
     res.cookie('token', token)
 
-    if(user && isMatch){
-        res.json({token,user})
+    if(captain && isMatch){
+        res.json({token,user: captain})
     }
 }
 module.exports.getUserProfile = async (req,res,next)=>{

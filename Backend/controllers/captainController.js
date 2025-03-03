@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 const captainModel = require("../models/captainModel");
-
+const blackListTokenModel = require("../models/blackListTokenModel");
 module.exports.registerCaptain = async (req, res) => {
   const errors = validationResult(req);
   console.log("Validation Errors:", errors.array()); // Debugging step
@@ -15,6 +15,7 @@ module.exports.registerCaptain = async (req, res) => {
     if(isCaptainExist){
       return res.status(400).json({errors:[{msg:"Captain already exists"}]});
     }
+    const hashPassword = await captainModel.hashPassword(password);
     const captain = await captainModel.create({
       fullname:{
 
@@ -22,7 +23,7 @@ module.exports.registerCaptain = async (req, res) => {
         lastname:fullname.lastname,
       },
       email,
-      password,
+      password:hashPassword,
       vehicle,
       location,
       vehicleType:vehicle.vehicleType,
@@ -38,3 +39,49 @@ module.exports.registerCaptain = async (req, res) => {
     res.status(500).json({ errors: err });
   }
 };
+module.exports.loginCaptain = async (req, res) => {
+   const errors = validationResult(req);
+   console.log("Validation Errors:", errors.array()); // Debugging step 
+   if (!errors.isEmpty()) {
+     return res.status(400).json({ errors: errors.array() });
+   }
+    try {
+      const { email, password } = req.body;
+      const captain = await captainModel.findOne({ email }).select("+password");
+      if (!captain) {
+        return res.status(400).json({ errors: [{ msg: "Captain not found" }] });
+      }
+      const isMatch = await captain.comparePassword(password);
+      console.log(password)
+      console.log(isMatch);
+      if (!isMatch) {
+        return res.status(400).json({ errors: [{ msg: "Invalid Password" }] });
+      } 
+      
+      if (captain && isMatch) {
+      
+      const token = captain.generateAuthToken();
+      res.cookie("token", token);
+      res.json({ token, captain });
+      console.log("Login successful");
+      }
+    }
+    catch (err) {
+      console.error("Error:", err);
+      res.status(500).json({ errors: err });
+    }
+};
+module.exports.getCaptainProfile = async (req, res) => {
+  res.status(201).json({captain:req.captain});
+  console.log("Captain Profile");
+}
+module.exports.logOutCaptain = async (req, res) => {
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(400).json({ error: "No token provided" });
+  }
+  blackListTokenModel.create({ token: token });
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
+  console.log("Captain logged out");
+}
