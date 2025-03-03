@@ -4,7 +4,7 @@ module.exports.createCaptain = async({firstname,lastname, email, password, statu
     if(!firstname || !email || !password || !status || !vehicle){
         res.json("Incomplete Details")
     }
-     const captain = captainModel.create({
+     const captain = await captainModel.create({
       fullname:{
             firstname,lastname
     },
