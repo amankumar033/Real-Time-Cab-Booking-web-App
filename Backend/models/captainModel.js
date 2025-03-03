@@ -62,3 +62,15 @@ const capatinSchema =new  mongoose.Schema({
     }
 
 })
+capatinSchema.method.generateAuthToken= function(){
+    const token = jwt.sign({_id:this.id},process.env.JWT_SECRET,{expiresIn:'24h'});
+    return token;
+}
+cpatainSchema.method.comparePassword = async function(password){
+    return await bcrypt.compare(password,this.password)
+}  
+capatinSchema.static.hashPassword = async function(password){
+    return await bcrypt.hash(password,10);
+}
+const captainModel = mongoose.create('captain',capatinSchema);
+module.exports = captainModel;
