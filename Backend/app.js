@@ -8,7 +8,7 @@ const captainRoute=require("./routes/captainRoute")
 
 require("dotenv").config(); 
 db();
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 // async function clearDatabase() {
 //     await mongoose.connection.dropDatabase();
 //     console.log("Database dropped.");

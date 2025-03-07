@@ -25,6 +25,7 @@ module.exports.registerUser = async (req,res,next)=>{
     res.status(201).json({user,token});
 }
 module.exports.loginUser = async (req,res,next)=>{
+   
     const error=validationResult(req);
     
     if(!error.isEmpty()){
@@ -40,19 +41,21 @@ module.exports.loginUser = async (req,res,next)=>{
         return res.status(400).json({message:"Invalid Password"});
     }
     const token = captain.generateAuthToken();
+    console.log("this is ",token);
     res.cookie('token', token)
 
     if(captain && isMatch){
         res.json({token,user: captain})
     }
 }
+
 module.exports.getUserProfile = async (req,res,next)=>{
     res.json(req.user);
 }
 module.exports.logOutUser = async (req,res,next)=>{
-    res.clearCookie('token');
     const token = req.cookies.token || req.headers.authorization.split(" ")[1];
-    const blacklistToken = blackListTokenModel.create({token})
+    blackListTokenModel.create({token})
+    res.clearCookie('token');
     res.json({message:"Logged out successfully"});
 }
- 
+
