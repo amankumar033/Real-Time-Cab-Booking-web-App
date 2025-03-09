@@ -14,8 +14,10 @@ const UserSignup = () => {
     console.log("User sign up email:",email)
     console.log("User sign up password:",password)
      setUserData({
-      firstname:firstname,
-      lastname:lastname,
+      fullname:{
+        firstname:firstname,
+        lastname:lastname,
+      },
       email:email,
       password:password
      })

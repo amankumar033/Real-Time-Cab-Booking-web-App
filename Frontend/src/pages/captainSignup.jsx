@@ -14,8 +14,10 @@ const CaptainSignup = () => {
     console.log("Captain sign up email:",email)
     console.log("Captain sign up password:",password)
      setCaptainData({
-      firstname:firstname,
-      lastname:lastname,
+      fullname:{
+        firstname:firstname,
+        lastname:lastname,
+      },
       email:email,
       password:password
      })
