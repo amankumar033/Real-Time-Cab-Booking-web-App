@@ -24,7 +24,7 @@ const UserLogin = () => {
 <div>
 
 
-    <img className='w-16 mb-8' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+    <img className='w-16 mb-8' src="assets/Uber_logo.png" alt="" />
       
      <form onSubmit={submitHandler} className='flex flex-col  '>
       <h3 className='font-semibold text-lg mb-1' >What's your email</h3>
