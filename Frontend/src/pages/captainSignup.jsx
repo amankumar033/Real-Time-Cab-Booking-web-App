@@ -6,14 +6,14 @@ const CaptainSignup = () => {
   const [lastname,setLastname] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-  const [captainData,setcaptainData] = useState({});
+  const [captainData,setCaptainData] = useState({});
   const submitHandler=(e)=>{
     e.preventDefault();
     console.log("Captain Firstname:",firstname)
     console.log("Captain Lastname:",lastname)
     console.log("Captain sign up email:",email)
     console.log("Captain sign up password:",password)
-     setcaptainData({
+     setCaptainData({
       firstname:firstname,
       lastname:lastname,
       email:email,
