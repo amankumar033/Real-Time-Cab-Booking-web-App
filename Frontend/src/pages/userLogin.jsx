@@ -1,4 +1,27 @@
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
+const UserLogin = () => {
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [userData,setuserData] = useState({});
+  const submitHandler=(e)=>{
+    e.preventDefault();
+    console.log("user email:",email)
+    console.log("user password:",password)
+     setuserData({
+      email:email,
+      password:password
+     })
+     console.log("userdata is :",userData);
+    setEmail('');
+    setPassword('');
+  }
+  return (
+    <>
+    <div className='p-5  h-screen flex flex-col justify-between'>
+      
+<div>
 
 
     <img className='w-16 mb-8' src="assets/Uber_logo.png" alt="" />
