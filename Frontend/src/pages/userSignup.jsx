@@ -46,7 +46,7 @@ const UserSignup = () => {
       <input value={email} onChange={(e)=>{setEmail(e.target.value)}} required className='bg-[#eeeeee] py-2 px-2 text-sm placeholder:text-base  rounded mb-5' type="email"  placeholder='email@example.com' />
       <h3 className='font-semibold text-lg mb-1' >Enter Password</h3>
       <input  value={password} onChange={(e)=>{setPassword(e.target.value)}} required className='bg-[#eeeeee] py-2 px-2 text-sm placeholder:text-base mb-9' type="password" placeholder='password'  />
-      <button className='bg-black text-white rounded py-2 mb-3 font-semibold'>Register</button>
+      <button className='bg-black text-white rounded py-2 mb-3 font-semibold'>Create Account</button>
      </form>
      <p className='text-center' >Already have an account? <Link to={'/userlogin'} className='text-blue-600'>Login here</Link></p>
      </div>
