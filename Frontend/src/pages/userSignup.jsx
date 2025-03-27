@@ -1,26 +1,29 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import React, { use, useState,  } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 const UserSignup = () => {
   const [firstname,setFirstname] = useState('');
   const [lastname,setLastname] = useState('');
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [userData,setUserData] = useState({});
+  const navigate = useNavigate()
   const submitHandler=(e)=>{
     e.preventDefault();
     console.log("User Firstname:",firstname)
     console.log("User Lastname:",lastname)
     console.log("User sign up email:",email)
     console.log("User sign up password:",password)
-     setUserData({
+
+
+     const newUser ={
       fullname:{
         firstname:firstname,
         lastname:lastname,
       },
       email:email,
       password:password
-     })
+     }
      console.log("User sign up Data is :",userData);
      setFirstname('');
      setLastname('');
