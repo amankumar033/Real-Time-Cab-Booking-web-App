@@ -24,7 +24,9 @@ const UserSignup = () => {
       email:email,
       password:password
      }
-     console.log("User sign up Data is :",userData);
+     const response = axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/register`,newUser)
+     console.log("Response is :",response)
+     console.log("User sign up Data is :",newUser);
      setFirstname('');
      setLastname('');
     setEmail('');
