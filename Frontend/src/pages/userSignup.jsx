@@ -1,6 +1,7 @@
-import React, { use, useState,  } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { UserDataContext } from '../context/UserContext'
 const UserSignup = () => {
   const [firstname,setFirstname] = useState('');
   const [lastname,setLastname] = useState('');
@@ -8,7 +9,11 @@ const UserSignup = () => {
   const [password,setPassword] = useState('');
   const [userData,setUserData] = useState({});
   const navigate = useNavigate()
-  const submitHandler=(e)=>{
+
+  const {user, setuser} = React.useContext(UserDataContext)
+
+
+  const submitHandler=async(e)=>{
     e.preventDefault();
     console.log("User Firstname:",firstname)
     console.log("User Lastname:",lastname)
@@ -24,7 +29,13 @@ const UserSignup = () => {
       email:email,
       password:password
      }
-     const response = axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/register`,newUser)
+     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`,newUser)
+
+     if(response.status === 201){
+      const data = response.data;
+      setUserData(data.user)
+      navigate('/Home')
+     }
      console.log("Response is :",response)
      console.log("User sign up Data is :",newUser);
      setFirstname('');

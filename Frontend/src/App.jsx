@@ -5,8 +5,8 @@ import UserLogin from './pages/userLogin'
 import UserSignup from './pages/userSignup'
 import CaptainLogin from './pages/captainLogin'
 import CaptainSignup from './pages/captainSignup'
-import { UserDataContext } from './context/userContext'
-import Start from './pages/Start'
+import Home from './pages/home'
+
 
 
 const App = () => {
