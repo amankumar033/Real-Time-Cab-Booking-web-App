@@ -20,7 +20,12 @@ const UserProtectWrapper = ({ children }) => {
             setuser(response.data.user)
             setIsLoading(false)
         } }).catch((error) => {
-         
+            console.error("Error fetching captain data:", error)
+            localStorage.removeItem('userToken')
+            navigate('/UserLogin')
+        })
+    
+    
         if (isloading) {
             return <div className='flex justify-center items-center h-screen'>Loading...</div>
         }
