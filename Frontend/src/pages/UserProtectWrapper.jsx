@@ -33,4 +33,4 @@ const UserProtectWrapper = ({ children }) => {
     return <>{children}</>
 }
 
-
+export default UserProtectWrapper
