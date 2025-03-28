@@ -25,7 +25,7 @@ module.exports.registerCaptain = async (req, res) => {
       email,
       password:hashPassword,
       vehicle,
-      location,
+      // location,
       vehicleType:vehicle.vehicleType,
       status,
       capacity:vehicle.capacity, 

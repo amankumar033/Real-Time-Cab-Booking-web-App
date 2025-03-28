@@ -28,7 +28,7 @@ const UserLogin = () => {
       setUser(data.user)
       localStorage.setItem('userToken',data.token)
       console.log("User login data is :",data.user)
-       navigate('/Home')
+       navigate('/UserHome')
     }
 
 

@@ -35,7 +35,7 @@ const UserSignup = () => {
       const data = response.data;
       setUserData(data.user)
       localStorage.setItem('userToken',data.token)
-      navigate('/Home')
+      navigate('/UserHome')
      }
      console.log("Response is :",response)
      console.log("User sign up Data is :",newUser);
