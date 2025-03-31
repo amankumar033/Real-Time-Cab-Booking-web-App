@@ -4,7 +4,6 @@ import axios from 'axios';
 const CaptainLogin = () => {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-  const [captainData,setcaptainData] = useState({});
   const [captain, setCaptain] = useState({});
   const navigate = useNavigate();
 
@@ -12,19 +11,21 @@ const CaptainLogin = () => {
     e.preventDefault();
     console.log("Captain email:",email)
     console.log("Captain password:",password)
-    setCaptain({
+    const captainData=({
       email:email,
       password:password
     })
-    setEmail('');
-    setPassword('');
-    await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`,captain).then((response)=>{
+   
+    await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/login`,captainData).then((response)=>{
       if(response.status === 200){
         const data = response.data;
+        setCaptain(data.captain)
         localStorage.setItem('captainToken',data.token)
         console.log("Captain data:",data)
         navigate('/CaptainHome')
       }
+      setEmail('');
+      setPassword('');
     }
   )
   }

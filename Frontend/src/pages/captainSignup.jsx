@@ -22,7 +22,7 @@ const CaptainSignup = () => {
     console.log("Captain sign up email:",email)
     console.log("Captain sign up password:",password)
     console.log("vehicle",typeof(vehicleType))
-    const  newCaptain=({
+    const  newCaptain={
       fullname:{
         firstname:firstname,
         lastname:lastname,
@@ -35,25 +35,23 @@ const CaptainSignup = () => {
         plate:vehiclePlate,
         vehicleType:vehicleType
       }
-     })
+     }
 
-   
-     
-     setFirstname('');
-     setLastname('');
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`,newCaptain)
+    if(response.status === 201){
+      const data = response.data;
+      setCaptainData(data.captain)
+      localStorage.setItem('captainToken',data.token)
+      navigate('/CaptainHome')
+    }
+    setFirstname('');
+    setLastname('');
     setEmail('');
     setPassword('');
     setVehicleCapacity('');
     setVehicleColor('');
     setVehiclePlate('');
     setVehicleType('');
-
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captain/register`,newCaptain)
-    if(response.status === 201){
-      const data = response.data;
-      localStorage.setItem('captainToken',data.token)
-      navigate('/CaptainHome')
-    }
   }
   return (
     <>

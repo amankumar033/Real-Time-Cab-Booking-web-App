@@ -28,7 +28,7 @@ module.exports.authCaptain = async (req, res, next) => {
 
 
   if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized Token Not Found' });
   }
 
   const isBlacklisted = await blackListTokenModel.findOne({ token: token });
@@ -40,14 +40,21 @@ module.exports.authCaptain = async (req, res, next) => {
   }
 
   try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const captain = await captainModel.findById(decoded._id)
-      req.captain = captain;
+    console.log("Received Token:", token); // Debugging
 
-      return next()
-  } catch (err) {
-      console.log(err);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Token:", decoded); // Debugging
 
-      res.status(401).json({ message: 'Unauthorized' });
-  }
+    const captain = await captainModel.findById(decoded._id);
+    if (!captain) {
+        return res.status(401).json({ message: "Captain not found" });
+    }
+
+    req.captain = captain;
+    return next();
+} catch (err) {
+    console.error("JWT Verification Error:", err.message);
+    res.status(401).json({ message: 'Unauthorized Error In Message' });
+}
+
 }
