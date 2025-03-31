@@ -1,13 +1,13 @@
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { CaptainDataContext } from '../context/CaptainContext'
 const CaptainProtectWrapper = ({ children }) => {
     const navigate = useNavigate()
     const [isloading, setIsLoading] = useState(true)
-    const {captain, setCaptain} = useContext(captainDataContext)
+    const {captain, setCaptain} = useContext(CaptainDataContext)
+    const token = localStorage.getItem('captainToken')
     useEffect(() => {
-        const token = localStorage.getItem('captainToken')
         if (!token) {
             navigate('/CaptainLogin')
         }
@@ -18,8 +18,10 @@ const CaptainProtectWrapper = ({ children }) => {
         Authorization: `Bearer ${token}`
     }
   }).then((response) => {
-    if (response.status === 200) {
+    console.log("Response status:", response.status);
+    if (response.status === 200 || response.status === 201) {
         setCaptain(response.data.captain)
+        console.log("Captain response data:", response.data.captain)
         setIsLoading(false)
     } }).catch((error) => {
         console.error("Error fetching captain data:", error)

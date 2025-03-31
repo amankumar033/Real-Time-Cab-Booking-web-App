@@ -3,8 +3,8 @@ import {Routes,Route} from 'react-router-dom'
 import Start from './pages/Start'
 import UserLogin from './pages/UserLogin'
 import UserSignup from './pages/UserSignup'
-import CaptainLogin from './pages/captainLogin'
-import CaptainSignup from './pages/captainSignup'
+import CaptainLogin from './pages/CaptainLogin'
+import CaptainSignup from './pages/CaptainSignup'
 import UserProtectWrapper from './pages/UserProtectWrapper'
 import UserLogout from './pages/UserLogout'
 import UserHome from './pages/UserHome'
@@ -34,8 +34,16 @@ const App = () => {
         </CaptainProtectWrapper>
         } />
 
-      <Route path="/userLogout" element={<UserLogout/>} />
-      <Route path="/captainLogout" element={<CaptainLogout/>} />
+      <Route path="/userLogout" element={
+        <UserProtectWrapper>
+           <UserLogout/>
+        </UserProtectWrapper>
+        } />
+      <Route path="/captainLogout" element=
+      {<CaptainProtectWrapper>
+        <CaptainLogout/>
+      </CaptainProtectWrapper>
+      } />
     </Routes>
   )
 }
