@@ -33,8 +33,8 @@ module.exports.registerCaptain = async (req, res) => {
       plate:vehicle.plate
     });
     console.log("Created Captain debugging:", captain);
-
-    res.status(201).json({ captain });
+    const token=await captain.generateAuthToken();
+    res.status(201).json({ captain,token });
   } catch (err) {
     console.error("Error:", err);
     res.status(500).json({ errors: err });
@@ -68,7 +68,7 @@ module.exports.loginCaptain = async (req, res, next) => {
 }
 module.exports.getCaptainProfile = async (req, res) => {
   res.status(201).json({captain:req.captain});
-  console.log("Captain Profile");
+  
 }
 module.exports.logOutCaptain = async (req, res, next) => {
   const token = req.cookies.token || req.headers.authorization?.split(' ')[ 1 ];

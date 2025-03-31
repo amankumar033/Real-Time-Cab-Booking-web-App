@@ -34,6 +34,7 @@ const UserSignup = () => {
      if(response.status === 201){
       const data = response.data;
       setUserData(data.user)
+      console.log("User Data  token is dfsdfsdfis :",data.token)
       localStorage.setItem('userToken',data.token)
       navigate('/UserHome')
      }
