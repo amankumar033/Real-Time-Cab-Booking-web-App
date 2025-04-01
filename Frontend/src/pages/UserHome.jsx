@@ -10,6 +10,7 @@ const UserHome = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef=useRef(null)
   const panelClose =useRef(null)
+  const mapOpacity= useRef(null)
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("form submitted Data:", { pickUpLocation, destination });
@@ -25,16 +26,25 @@ const UserHome = () => {
      gsap.to(panelClose.current, {
           opacity:1
         })
+     gsap.to(mapOpacity.current, {
+          opacity:0,
+          duration:2,
+        })
     
     }
     else{
       gsap.to(panelRef.current, {
         height:"0%",
-        padding:0
+        padding:0,
+        duration:0.8,
          }) 
       gsap.to(panelClose.current, {
       opacity:0
     }) 
+    gsap.to(mapOpacity.current, {
+      opacity:1,
+      duration:1.5,
+    })
     }
 },[panelOpen])
   return (
@@ -44,9 +54,9 @@ const UserHome = () => {
         src="/assets/uber_logo.png"
         alt=""
       />
-      <div className="h-screen w-screen ">
+      <div ref={mapOpacity} className="h-screen w-screen ">
         {/* image for temporary use */}
-        <img
+        <img 
           className="h-full w-full  object-cover"
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
           alt=""
@@ -95,6 +105,9 @@ const UserHome = () => {
         <div ref={panelRef} className="bg-white h-0 mt-0 ">
           <LocatioSearchPanel/>
         </div>
+      </div>
+      <div>
+
       </div>
     </div>
   );
