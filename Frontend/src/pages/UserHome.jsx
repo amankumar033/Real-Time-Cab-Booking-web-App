@@ -1,15 +1,31 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState } from "react";
+import {useGSAP} from "@gsap/react"
+import { gsap } from "gsap";
 const UserHome = () => {
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
+  const panelRef=useRef(null)
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("form submitted Data:", { pickUpLocation, destination });
     setPickUpLocation("");
     setDestination("");
   };
+  useGSAP(function(){
+    if(panelOpen){
+      gsap.to(panelRef.current, {
+        height:"70%",
+        duration:0.8,
+    })  
+    }
+    else{
+      gsap.to(panelRef.current, {
+        height:"0%"
+    })  
+    }
+},[panelOpen])
   return (
     <div className="relative h-screen  ">
       <img
@@ -63,7 +79,7 @@ const UserHome = () => {
             </button>
           </form>
         </div>
-        <div className="bg-red-500 w-full h-[60%] hidden "></div>
+        <div ref={panelRef} className="bg-red-500 w-full   "></div>
       </div>
     </div>
   );
