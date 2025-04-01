@@ -18,28 +18,30 @@ const UserHome = () => {
   };
   useGSAP(function(){
     if(panelOpen){
-      gsap.to(panelRef.current, {
-        height:"70%",
+      gsap.to(panelRef.current, {     
+        height:"60%",
+        paddingLeft:24,
         duration:0.8,})
-        gsap.to(panelClose.current, {
+     gsap.to(panelClose.current, {
           opacity:1
         })
     
     }
     else{
       gsap.to(panelRef.current, {
-        height:"0%"
-    }) 
-    gsap.to(panelClose.current, {
+        height:"0%",
+        padding:0
+         }) 
+      gsap.to(panelClose.current, {
       opacity:0
     }) 
     }
 },[panelOpen])
   return (
-    <div className="relative h-screen  ">
+    <div className="h-screen overflow-hidden relative">
       <img
         className="w-16 absolute mb-8 left-5  top-5"
-        src="/assets/Uber_logo.png"
+        src="/assets/uber_logo.png"
         alt=""
       />
       <div className="h-screen w-screen ">
@@ -51,7 +53,7 @@ const UserHome = () => {
         />
       </div>
 
-      <div className="  flex flex-col justify-end bottom-0 h-screen absolute  w-full  ">
+      <div className="  flex flex-col justify-end top-0 h-screen absolute  w-full mb-0  ">
         <div className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white relative">
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
 
@@ -85,12 +87,12 @@ const UserHome = () => {
               className="bg-[#eee]  rounded-xl text-base mt-4 w-full py-3 px-12"
               placeholder="Enter your destination"
             />
-            <button className="border p-2 w-max mt-5 rounded-xl">
+            <button className="border p-2 w-max mt-5 rounded-xl ">
               Leave Now
             </button>
           </form>
         </div>
-        <div ref={panelRef} className="bg-red-500 w-full ">
+        <div ref={panelRef} className="bg-white h-0 mt-0 ">
           <LocatioSearchPanel/>
         </div>
       </div>
