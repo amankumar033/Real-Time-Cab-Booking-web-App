@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import {useGSAP} from "@gsap/react"
 import { gsap } from "gsap";
@@ -8,11 +8,17 @@ const UserHome = () => {
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
+  const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false);
   const panelRef=useRef(null)
-  const panelClose =useRef(null)
+  const arrowPanelClose =useRef(null)
+  const vehiclePanelRef=useRef(null)
   const mapOpacity= useRef(null)
+  const formClose=useRef(null)
   const submitHandler = (e) => {
     e.preventDefault();
+    if(panelOpen){
+    setVehiclePanelOpen(true);}
     console.log("form submitted Data:", { pickUpLocation, destination });
     setPickUpLocation("");
     setDestination("");
@@ -21,9 +27,10 @@ const UserHome = () => {
     if(panelOpen){
       gsap.to(panelRef.current, {     
         height:"60%",
+       visibility:"visible",
         paddingLeft:24,
         duration:0.8,})
-     gsap.to(panelClose.current, {
+     gsap.to(arrowPanelClose.current, {
           opacity:1
         })
      gsap.to(mapOpacity.current, {
@@ -38,7 +45,7 @@ const UserHome = () => {
         padding:0,
         duration:0.8,
          }) 
-      gsap.to(panelClose.current, {
+      gsap.to(arrowPanelClose.current, {
       opacity:0
     }) 
     gsap.to(mapOpacity.current, {
@@ -47,27 +54,69 @@ const UserHome = () => {
     })
     }
 },[panelOpen])
+
+  useGSAP(function(){
+    if(vehiclePanelOpen){
+      gsap.to(vehiclePanelRef.current, {
+        transform:"translateY(0%)",        
+        duration:0.8,
+      })
+      gsap.to(panelRef.current, {
+       visibility:"hidden",
+        duration:0.8,
+      })
+    }
+    else{
+      gsap.to(vehiclePanelRef.current, {
+        transform:"translateY(100%)",
+        duration:0.8,
+      })
+    }
+  },[vehiclePanelOpen])
+ 
+  useGSAP(() => {
+    if (mapOpen) {
+      gsap.to(formClose.current, {
+        opacity: 0,
+        pointerEvents: "none", // Disable interactions
+        duration: 0.8,
+      });
+    } else {
+      gsap.to(formClose.current, {
+        opacity: 1,
+        pointerEvents: "all",
+        duration: 0.8,
+      });
+    }
+  }, [mapOpen]);
+  
+  
   return (
     <div className="h-screen overflow-hidden relative">
-      <img
+      <img 
         className="w-16 absolute mb-8 left-5  top-5"
         src="/assets/uber_logo.png"
         alt=""
       />
-      <div ref={mapOpacity} className="h-screen w-screen ">
+      <div  ref={mapOpacity} className="h-screen w-screen ">
         {/* image for temporary use */}
         <img 
-          className="h-full w-full  object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+  className="h-full w-full object-cover"
+  src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
+  alt="Map Background"
+/>
+
       </div>
 
-      <div className="  flex flex-col justify-end top-0 h-screen absolute  w-full mb-0  ">
+      <div ref={formClose} className="  flex flex-col justify-end top-0 h-screen absolute  w-full mb-0  ">
         <div className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white relative">
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
 
-          <img onClick={() => setPanelOpen(false)} ref={panelClose} className="absolute top-6 right-6" src="/assets/arrow-down-s-line.png" alt="" />
+          <img onClick={() =>
+            {  if (panelOpen) {
+              setPanelOpen(false);
+              setVehiclePanelOpen(false); 
+            }}} ref={arrowPanelClose} className="absolute top-6 right-6" src="/assets/arrow-down-s-line.png" alt="" />
 
           <form onSubmit={(e) => submitHandler(e)} className="flex flex-col">
             <input
@@ -103,11 +152,11 @@ const UserHome = () => {
           </form>
         </div>
         <div ref={panelRef} className="bg-white h-0 mt-0 ">
-          <LocatioSearchPanel/>
+          <LocatioSearchPanel vehiclePanelOpen={vehiclePanelOpen} setVehiclePanelOpen={setVehiclePanelOpen}/>
         </div>
       </div>
 
-   <div className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4">
+   <div ref={vehiclePanelRef} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%]">
         <h2 className="font-bold text-xl mb-3">Choose a Vehicle</h2>
      <div className="flex active:border-2 rounded-xl flex-row gap-2">
       <div> 
