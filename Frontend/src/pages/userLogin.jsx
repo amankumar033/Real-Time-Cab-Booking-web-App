@@ -46,7 +46,7 @@ const UserLogin = () => {
 
     <img className='w-16 mb-8' src="assets/Uber_logo.png" alt="" />
       
-     <form onSubmit={submitHandler} className='flex flex-col  '>
+     <form onSubmit={submitHandler} className='flex flex-col'>
       <h3 className='font-semibold text-lg mb-1' >What's your email</h3>
       <input value={email} onChange={(e)=>{setEmail(e.target.value)}} required className='bg-[#eeeeee] py-2 px-2 text-sm placeholder:text-base  rounded mb-5' type="email"  placeholder='email@example.com' />
       <h3 className='font-semibold text-lg mb-1' >Enter Password</h3>

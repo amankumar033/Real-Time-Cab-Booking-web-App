@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const Start = () => {
   return (
     <>
-      <div className='bg-cover bg-[url(assets/uber_home_screen_lights.png)]  h-screen w-full flex flex-col justify-between '>
+      <div className='bg-cover bg-[url(assets/uber_start_screen_lights.png)]  h-screen w-full flex flex-col justify-between '>
 
       
         <div>
