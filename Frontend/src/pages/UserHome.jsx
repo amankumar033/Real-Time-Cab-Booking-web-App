@@ -86,7 +86,12 @@ const UserHome = () => {
     },
     [panelOpen]
   );
+  useEffect(() => {
+    console.log("panelopne:",panelOpen);
+    console.log("vehiclepanelopen:",vehiclePanelOpen);
+    console.log("panelref:",panelRef);
 
+  }, [panelOpen, vehiclePanelOpen,formClose]);
   useGSAP(
     function () {
       if (vehiclePanelOpen) {
@@ -133,18 +138,21 @@ const UserHome = () => {
           duration: 1.5,
           pointerEvents: "auto",
         });
-
         gsap.to(uberLogo.current, {
           opacity: 1,
           duration: 0.8,
         });
-        if (panelOpen) {
-          gsap.to(panelRef.current, {
-            visibility: "visible",
-            duration: 0.8,
-          });
-
-        }
+        gsap.to(panelRef.current, {
+          padding: 0,
+          opacity: 0,
+          height: 0,
+          marginTop: 0,
+          duration: 0.9,
+          onComplete: () => {
+            panelRef.current.style.display = "none";
+          },
+        });
+       
       }
     },
     [vehiclePanelOpen]
@@ -189,9 +197,6 @@ const UserHome = () => {
           alt="Map Background"
         />
       </div>
-         <div>
-          <h2>dd</h2>
-         </div>
       <div
         ref={locationPanelClose}
         className="  flex flex-col justify-end bottom-0 absolute  w-full mb-0  "
@@ -208,11 +213,9 @@ const UserHome = () => {
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
 
           <img
-            onClick={() => {
-              if (panelOpen) {
+            onClick={() => {            
                 setPanelOpen(false);
-                setVehiclePanelOpen(false);
-              }
+                setVehiclePanelOpen(false);      
             }}
             ref={arrowPanelClose}
             className="absolute top-6 right-6"
