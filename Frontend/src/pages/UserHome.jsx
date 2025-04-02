@@ -13,6 +13,10 @@ const UserHome = () => {
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false)
+  const [currentAddress,setCurrentAddress] = useState('')
+  const [destinationAddress,setDestinationAddress] = useState('')
+  const [confirmRideVehicleImg, setConfirmRideVehicleImg] = useState('')
+  const [fare, setFare]=useState('');
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -23,9 +27,10 @@ const UserHome = () => {
   const confirmRidePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
-      setVehiclePanelOpen(true);
-  
+    setVehiclePanelOpen(true);
     console.log("form submitted Data:", { pickUpLocation, destination });
+    setCurrentAddress(pickUpLocation);
+    setDestinationAddress(destination);
     setPickUpLocation("");
     setDestination("");
   };
@@ -178,6 +183,7 @@ const UserHome = () => {
         transform:'translateY(0)',
         visibility:'visible',
       });
+      
     } else {
       gsap.to(confirmRidePanelRef.current, {
         transform:'translateY(100%)',
@@ -278,11 +284,12 @@ const UserHome = () => {
         </div>
       </div>
 
-     <div ref={vehiclePanelRef} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%] ">
-     <VehiclePanel confirmRidePanel={confirmRidePanel} setConfirmRidePanel={setConfirmRidePanel}/>
+     <div ref={vehiclePanelRef}onClick={()=>{setPanelOpen(false); setVehiclePanelOpen(false)}} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%] ">
+     <VehiclePanel confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} 
+     fare={fare} setFare={setFare}setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/>
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%]" ref={confirmRidePanelRef}>
-     <ConfirmedRide/> 
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[80%]" ref={confirmRidePanelRef}>
+     <ConfirmedRide confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} currentAddress={currentAddress}  destinationAddress={destinationAddress} fare={fare} setFare={setFare} setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/> 
      </div>
      
     </div>
