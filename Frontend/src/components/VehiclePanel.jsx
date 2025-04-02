@@ -1,11 +1,11 @@
 import React from 'react'
 
-const VehiclePanel = () => {
+const VehiclePanel = (props) => {
   return (
     <div>
       <div className='flex flex-col gap-5'>
         <h2 className="font-bold text-xl mb-3">Choose a Vehicle</h2>
-        <div className="flex active:border-2 rounded-xl flex-row gap-2">
+        <div onClick={()=>{props.setConfirmRidePanel(true)}} className="flex active:border-2 rounded-xl flex-row gap-2">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -34,7 +34,7 @@ const VehiclePanel = () => {
           </div>
         </div>
 
-        <div className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{props.setConfirmRidePanel(true)}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -63,7 +63,7 @@ const VehiclePanel = () => {
           </div>
         </div>
 
-        <div className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{props.setConfirmRidePanel(true)}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"

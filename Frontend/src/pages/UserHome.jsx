@@ -5,19 +5,22 @@ import { gsap } from "gsap";
 import "remixicon/fonts/remixicon.css";
 import LocatioSearchPanel from "../components/LocatioSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
+import ConfirmedRide from "../components/ConfirmedRide";
 const UserHome = () => {
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [confirmRidePanel, setConfirmRidePanel] = useState(false)
   const panelRef = useRef(null);
-  const arrowPanelClose = useRef(null);
+  const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
-  const mapOpacity = useRef(null);
-  const locationPanelClose = useRef(null);
-  const formClose = useRef(null);
-  const uberLogo = useRef(null);
+  const mapOpacityRef = useRef(null);
+  const locationPanelCloseRef = useRef(null);
+  const formCloseRef = useRef(null);
+  const uberLogoRef = useRef(null);
+  const confirmRidePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
       setVehiclePanelOpen(true);
@@ -38,20 +41,20 @@ const UserHome = () => {
           display: "block",
           visibility: "visible",
         });
-        gsap.to(locationPanelClose.current, {
+        gsap.to(locationPanelCloseRef.current, {
           height: "100%",
           duration: 0.8,
         });
 
-        gsap.to(arrowPanelClose.current, {
+        gsap.to(arrowPanelCloseRef.current, {
           opacity: 1,
         });
-        gsap.to(mapOpacity.current, {
+        gsap.to(mapOpacityRef.current, {
           opacity: 0,
           duration: 0.8,
           pointerEvents: "none",
         });
-        gsap.to(uberLogo.current, {
+        gsap.to(uberLogoRef.current, {
           opacity: 0,
           duration: 0.8,
         });
@@ -66,21 +69,25 @@ const UserHome = () => {
             panelRef.current.style.display = "none";
           },
         });
-        gsap.to(locationPanelClose.current, {
+        gsap.to(locationPanelCloseRef.current, {
           height: "auto",
           duration: 0.8,
         });
-        gsap.to(arrowPanelClose.current, {
+        gsap.to(arrowPanelCloseRef.current, {
           opacity: 0,
         });
-        gsap.to(mapOpacity.current, {
+        gsap.to(mapOpacityRef.current, {
           opacity: 1,
           duration: 1.5,
           pointerEvents: "auto",
         });
-        gsap.to(uberLogo.current, {
+        gsap.to(uberLogoRef.current, {
           opacity: 1,
           duration: 0.8,
+        });
+        gsap.to(confirmRidePanelRef.current, {
+          transform:'translateY(100%)',
+          visibility:'hidden'
         });
       }
     },
@@ -101,14 +108,14 @@ const UserHome = () => {
           ease: "power2.out",
           display: "block",
         }) 
-        gsap.to(locationPanelClose.current, {
+        gsap.to(locationPanelCloseRef.current, {
           height: "100%",
           duration: 0.8,
         });
-        gsap.to(arrowPanelClose.current, {
+        gsap.to(arrowPanelCloseRef.current, {
           opacity: 1,
         });
-        gsap.to(mapOpacity.current, {
+        gsap.to(mapOpacityRef.current, {
           opacity: 0,
           duration: 0,
           pointerEvents: "none",
@@ -118,19 +125,19 @@ const UserHome = () => {
           transform: "translateY(100%)",
           duration: 0.9,
         });
-        gsap.to(locationPanelClose.current, {
+        gsap.to(locationPanelCloseRef.current, {
           height: "auto",
           duration: 0.8,
         });
-        gsap.to(arrowPanelClose.current, {
+        gsap.to(arrowPanelCloseRef.current, {
           opacity: 0,
         });
-        gsap.to(mapOpacity.current, {
+        gsap.to(mapOpacityRef.current, {
           opacity: 1,
           duration: 1.5,
           pointerEvents: "auto",
         });
-        gsap.to(uberLogo.current, {
+        gsap.to(uberLogoRef.current, {
           opacity: 1,
           duration: 0.8,
         });
@@ -152,31 +159,46 @@ const UserHome = () => {
 
   useGSAP(() => {
     if (mapOpen) {
-      gsap.to(formClose.current, {
+      gsap.to(formCloseRef.current, {
         opacity: 0,
         pointerEvents: "none", 
         duration: 0.8,
       });
     } else {
-      gsap.to(formClose.current, {
+      gsap.to(formCloseRef.current, {
         opacity: 1,
         pointerEvents: "all",
         duration: 0.8,
       });
     }
   }, [mapOpen]);
+  useGSAP(() => {
+    if (confirmRidePanel) {
+      gsap.to(confirmRidePanelRef.current, {
+        transform:'translateY(0)',
+        visibility:'visible',
+      });
+    } else {
+      gsap.to(confirmRidePanelRef.current, {
+        transform:'translateY(100%)',
+        visibility:'hidden'
+      });
+    }
+  }, [confirmRidePanel]);
+  
+  
 
   return (
     <div className="h-screen overflow-hidden relative">
       <img
-        ref={uberLogo}
+        ref={uberLogoRef}
         className="w-16 absolute mb-8 left-5  top-5"
         src="/assets/uber_logo.png"
         alt=""
       />
 
       <div
-        ref={mapOpacity}
+        ref={mapOpacityRef}
         onClick={() => {
           setMapOpen(true);
         }}
@@ -190,7 +212,7 @@ const UserHome = () => {
         />
       </div>
       <div
-        ref={locationPanelClose}
+        ref={locationPanelCloseRef}
         className="  flex flex-col justify-end bottom-0 absolute  w-full mb-0  "
       >
         <div onClick={()=>{setMapOpen(false)}} className="absolute left-42 bottom-20">
@@ -199,7 +221,7 @@ const UserHome = () => {
         </div>
 
         <div
-          ref={formClose}
+          ref={formCloseRef}
           className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white relative"
         >
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
@@ -209,7 +231,7 @@ const UserHome = () => {
                 setPanelOpen(false);
                 setVehiclePanelOpen(false);      
             }}
-            ref={arrowPanelClose}
+            ref={arrowPanelCloseRef}
             className="absolute top-6 right-6"
             src="/assets/arrow-down-s-line.png"
             alt=""
@@ -257,8 +279,12 @@ const UserHome = () => {
       </div>
 
      <div ref={vehiclePanelRef} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%] ">
-     <VehiclePanel/>
+     <VehiclePanel confirmRidePanel={confirmRidePanel} setConfirmRidePanel={setConfirmRidePanel}/>
      </div>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%]" ref={confirmRidePanelRef}>
+     <ConfirmedRide/> 
+     </div>
+     
     </div>
   );
 };
