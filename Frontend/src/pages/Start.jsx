@@ -7,8 +7,8 @@ const Start = () => {
       <div className='bg-cover bg-[url(assets/uber_start_screen_lights.png)]  h-screen w-full flex flex-col justify-between '>
 
       
-        <div>♦
-          <img className='w-16 absolute left-5 top-5' src="assets/Uber_logo.png" alt="" />
+        <div>
+          <img className='w-16 absolute left-5 top-5' src="assets/uber_logo.png" alt="" />
         </div>
 
         
