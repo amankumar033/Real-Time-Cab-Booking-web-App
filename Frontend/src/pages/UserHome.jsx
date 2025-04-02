@@ -77,7 +77,6 @@ const UserHome = () => {
           duration: 1.5,
           pointerEvents: "auto",
         });
-
         gsap.to(uberLogo.current, {
           opacity: 1,
           duration: 0.8,
@@ -86,12 +85,6 @@ const UserHome = () => {
     },
     [panelOpen]
   );
-  useEffect(() => {
-    console.log("panelopne:",panelOpen);
-    console.log("vehiclepanelopen:",vehiclePanelOpen);
-    console.log("panelref:",panelRef);
-
-  }, [panelOpen, vehiclePanelOpen,formClose]);
   useGSAP(
     function () {
       if (vehiclePanelOpen) {
@@ -106,9 +99,7 @@ const UserHome = () => {
           duration: 1,
           ease: "power2.out",
           display: "block",
-          visibility: "visible",
-        })
-        
+        }) 
         gsap.to(locationPanelClose.current, {
           height: "100%",
           duration: 0.8,
@@ -162,7 +153,7 @@ const UserHome = () => {
     if (mapOpen) {
       gsap.to(formClose.current, {
         opacity: 0,
-        pointerEvents: "none", // Disable interactions
+        pointerEvents: "none", 
         duration: 0.8,
       });
     } else {
