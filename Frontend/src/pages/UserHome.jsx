@@ -6,6 +6,7 @@ import "remixicon/fonts/remixicon.css";
 import LocatioSearchPanel from "../components/LocatioSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmedRide from "../components/ConfirmedRide";
+import LookingForDriver from "../components/LookingForDriver";
 const UserHome = () => {
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
@@ -181,13 +182,18 @@ const UserHome = () => {
     if (confirmRidePanel) {
       gsap.to(confirmRidePanelRef.current, {
         transform:'translateY(0)',
+        duration:1.1,
         visibility:'visible',
+
       });
       
     } else {
       gsap.to(confirmRidePanelRef.current, {
         transform:'translateY(100%)',
-        visibility:'hidden'
+        duration:1.1,
+        onComplete: () => {
+          confirmRidePanelRef.current.style.visibility = 'hidden'; // Hide only after animation completes
+        }
       });
     }
   }, [confirmRidePanel]);
@@ -288,10 +294,15 @@ const UserHome = () => {
      <VehiclePanel confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} 
      fare={fare} setFare={setFare}setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/>
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[80%]" ref={confirmRidePanelRef}>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[80%]" ref={confirmRidePanelRef}>
+      <div onClick={()=>{setConfirmRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
+        <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
+      </div>
      <ConfirmedRide confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} currentAddress={currentAddress}  destinationAddress={destinationAddress} fare={fare} setFare={setFare} setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/> 
      </div>
-     
+     <div>
+      <LookingForDriver/>
+     </div>
     </div>
   );
 };
