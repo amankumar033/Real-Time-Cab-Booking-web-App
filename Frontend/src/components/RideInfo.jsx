@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRideContext } from "../context/RideContext";
-const ConfirmedRide = (props) => {
+const RideInfo = (props) => {
   const {
       ridePanel,
       setRidePanel,
@@ -10,6 +10,8 @@ const ConfirmedRide = (props) => {
       setDestinationAddress,
       confirmRideVehicleImg,
       setConfirmRideVehicleImg,
+      confirmedRide,
+      setConfirmedRide,
       fare,
       setFare
     } = useRideContext();
@@ -43,10 +45,10 @@ const ConfirmedRide = (props) => {
         <h2>Cash</h2>
         </div>
       </div>
-      <button className='bg-green-500 p-1 rounded-lg  mt-auto'>Confirm</button>
+      <button onClick={()=>{setConfirmedRide(true);console.log("s",confirmedRide)}} className='bg-green-500 p-1 rounded-lg  mt-auto'>Confirm</button>
       </div>
     </div>
   );
 }
 
-export default ConfirmedRide;
+export default RideInfo;

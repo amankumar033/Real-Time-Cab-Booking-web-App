@@ -6,7 +6,7 @@ import { useRideContext } from "../context/RideContext";
 import "remixicon/fonts/remixicon.css";
 import LocatioSearchPanel from "../components/LocatioSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
-import ConfirmedRide from "../components/ConfirmedRide";
+import RideInfo from "../components/RideInfo";
 import LookingForDriver from "../components/LookingForDriver";
 
 const UserHome = () => {
@@ -19,6 +19,8 @@ const UserHome = () => {
     setDestinationAddress,
     confirmRideVehicleImg,
     setConfirmRideVehicleImg,
+    confirmedRide,
+    setConfirmedRide,
     fare,
     setFare
   } = useRideContext();
@@ -36,7 +38,7 @@ const UserHome = () => {
   const formCloseRef = useRef(null);
   const uberLogoRef = useRef(null);
   const ridePanelRef = useRef(null);
-
+  const confirmedRidePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
     setVehiclePanelOpen(true);
@@ -46,6 +48,9 @@ const UserHome = () => {
     setPickUpLocation("");
     setDestination("");
   };
+  useEffect(() => {
+   console.log(confirmedRide)
+  }, [confirmedRide]);
   useGSAP(
     function () {
       if (panelOpen) {
@@ -107,9 +112,7 @@ const UserHome = () => {
           visibility:'hidden'
         });
       }
-    },
-    [panelOpen]
-  );
+    }, [panelOpen]);
   useGSAP(
     function () {
       if (vehiclePanelOpen) {
@@ -171,9 +174,8 @@ const UserHome = () => {
        
       }
     },
-    [vehiclePanelOpen]
-  );
-
+   
+    [vehiclePanelOpen]);
   useGSAP(() => {
     if (mapOpen) {
       gsap.to(formCloseRef.current, {
@@ -195,9 +197,7 @@ const UserHome = () => {
         transform:'translateY(0)',
         duration:1.1,
         visibility:'visible',
-
-      });
-      
+      });   
     } else {
       gsap.to(ridePanelRef.current, {
         transform:'translateY(100%)',
@@ -208,6 +208,34 @@ const UserHome = () => {
       });
     }
   }, [ridePanel]);
+  useGSAP(() => {
+    if (confirmedRide) {
+      gsap.to(confirmedRidePanelRef.current, {
+        transform:'translateY(0)',
+        duration:1.1,
+        visibility:'visible',
+
+      });
+      gsap.to(ridePanelRef.current, {
+        transform:'translateY(100%)',
+        duration:1.1,
+        onComplete: () => {
+          ridePanelRef.current.style.visibility = 'hidden'; 
+        }
+      });
+    } else {
+      gsap.to(confirmedRidePanelRef.current, {
+        transform:'translateY(100%)',
+        duration:1.1,
+        onComplete: () => {
+          if (confirmedRidePanelRef.current) {
+            confirmedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Corrected ref
+          }
+        }
+      });
+      
+    }
+  }, [confirmedRide]);
   
   
 
@@ -314,9 +342,9 @@ const UserHome = () => {
       <div onClick={()=>{setRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
         <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
-     <ConfirmedRide /> 
+     <RideInfo /> 
      </div>
-     <div>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[75%]" ref={confirmedRidePanelRef}>
       <LookingForDriver/>
      </div>
     </div>
