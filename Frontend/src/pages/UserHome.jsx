@@ -8,6 +8,7 @@ import LocatioSearchPanel from "../components/LocatioSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import RideInfo from "../components/RideInfo";
 import LookingForDriver from "../components/LookingForDriver";
+import WaitingForDriver from "../components/WaitingForDriver";
 
 const UserHome = () => {
   const {
@@ -30,6 +31,7 @@ const UserHome = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
+  const [accpetedRide, setAcceptedRide] = useState(false)
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -39,6 +41,7 @@ const UserHome = () => {
   const uberLogoRef = useRef(null);
   const ridePanelRef = useRef(null);
   const confirmedRidePanelRef = useRef(null);
+  const acceptedRidePanelRef = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
     setVehiclePanelOpen(true);
@@ -229,13 +232,34 @@ const UserHome = () => {
         duration:1.1,
         onComplete: () => {
           if (confirmedRidePanelRef.current) {
-            confirmedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Corrected ref
+            confirmedRidePanelRef.current.style.visibility = 'hidden'; 
           }
         }
       });
       
     }
   }, [confirmedRide]);
+  useGSAP(() => {
+    if (accpetedRide) {
+      gsap.to(acceptedRidePanelRef.current, {
+        transform:'translateY(0)',
+        duration:1.1,
+        visibility:'visible',
+
+      });
+    } else {
+      gsap.to(acceptedRidePanelRef.current, {
+        transform:'translateY(100%)',
+        duration:1.1,
+        onComplete: () => {
+          if (confirmedRidePanelRef.current) {
+            confirmedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Corrected ref
+          }
+        }
+      });
+      
+    }
+  }, [acceptedRidePanelRef]);
   
   
 
@@ -344,8 +368,11 @@ const UserHome = () => {
       </div>
      <RideInfo /> 
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[75%]" ref={confirmedRidePanelRef}>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[70%]" ref={confirmedRidePanelRef}>
       <LookingForDriver/>
+     </div>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[68%]" ref={acceptedRidePanelRef}>
+      <WaitingForDriver/>
      </div>
     </div>
   );
