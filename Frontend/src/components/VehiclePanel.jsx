@@ -1,15 +1,28 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
+import { useRideContext } from "../context/RideContext";
 const VehiclePanel = (props) => {
-  useEffect(() => {
-    console.log("Updated Image URL:", props.confirmRideVehicleImg);
-  }, [props.confirmRideVehicleImg]);
- 
+ const {
+     ridePanel,
+     setRidePanel,
+     currentAddress,
+     setCurrentAddress,
+     destinationAddress,
+     setDestinationAddress,
+     confirmRideVehicleImg,
+     setConfirmRideVehicleImg,
+     fare,
+     setFare
+   } = useRideContext();
+
+   useEffect(() => {
+    console.log("Updated Image URL:", confirmRideVehicleImg);
+  }, [confirmRideVehicleImg]);
   return (
     <div>
       <div className='flex flex-col gap-5'>
         <h2 className="font-bold text-xl mb-3">Choose a Vehicle</h2>
-        <div onClick={()=>{props.setConfirmRidePanel(true); props.setConfirmRideVehicleImg('/assets/uber-car.jpeg');props.setFare('195');}} className="flex active:border-2 rounded-xl flex-row gap-2">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-car.jpeg');setFare('195');}} className="flex active:border-2 rounded-xl flex-row gap-2">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -38,7 +51,7 @@ const VehiclePanel = (props) => {
           </div>
         </div>
 
-        <div onClick={()=>{props.setConfirmRidePanel(true); props.setConfirmRideVehicleImg('/assets/uber-auto.jpeg');props.setFare('120')}} className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-auto.jpeg');setFare('120')}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -67,7 +80,7 @@ const VehiclePanel = (props) => {
           </div>
         </div>
 
-        <div onClick={()=>{props.setConfirmRidePanel(true); props.setConfirmRideVehicleImg('/assets/uber-bike.jpeg');props.setFare('90')}} className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-bike.jpeg');setFare('90')}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"

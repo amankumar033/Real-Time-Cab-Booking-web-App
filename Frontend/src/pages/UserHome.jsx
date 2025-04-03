@@ -2,22 +2,32 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
+import { useRideContext } from "../context/RideContext";
 import "remixicon/fonts/remixicon.css";
 import LocatioSearchPanel from "../components/LocatioSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import ConfirmedRide from "../components/ConfirmedRide";
 import LookingForDriver from "../components/LookingForDriver";
+
 const UserHome = () => {
+  const {
+    ridePanel,
+    setRidePanel,
+    currentAddress,
+    setCurrentAddress,
+    destinationAddress,
+    setDestinationAddress,
+    confirmRideVehicleImg,
+    setConfirmRideVehicleImg,
+    fare,
+    setFare
+  } = useRideContext();
+
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  const [confirmRidePanel, setConfirmRidePanel] = useState(false)
-  const [currentAddress,setCurrentAddress] = useState('')
-  const [destinationAddress,setDestinationAddress] = useState('')
-  const [confirmRideVehicleImg, setConfirmRideVehicleImg] = useState('')
-  const [fare, setFare]=useState('');
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -25,7 +35,8 @@ const UserHome = () => {
   const locationPanelCloseRef = useRef(null);
   const formCloseRef = useRef(null);
   const uberLogoRef = useRef(null);
-  const confirmRidePanelRef = useRef(null);
+  const ridePanelRef = useRef(null);
+
   const submitHandler = (e) => {
     e.preventDefault();
     setVehiclePanelOpen(true);
@@ -91,7 +102,7 @@ const UserHome = () => {
           opacity: 1,
           duration: 0.8,
         });
-        gsap.to(confirmRidePanelRef.current, {
+        gsap.to(ridePanelRef.current, {
           transform:'translateY(100%)',
           visibility:'hidden'
         });
@@ -179,8 +190,8 @@ const UserHome = () => {
     }
   }, [mapOpen]);
   useGSAP(() => {
-    if (confirmRidePanel) {
-      gsap.to(confirmRidePanelRef.current, {
+    if (ridePanel) {
+      gsap.to(ridePanelRef.current, {
         transform:'translateY(0)',
         duration:1.1,
         visibility:'visible',
@@ -188,15 +199,15 @@ const UserHome = () => {
       });
       
     } else {
-      gsap.to(confirmRidePanelRef.current, {
+      gsap.to(ridePanelRef.current, {
         transform:'translateY(100%)',
         duration:1.1,
         onComplete: () => {
-          confirmRidePanelRef.current.style.visibility = 'hidden'; // Hide only after animation completes
+          ridePanelRef.current.style.visibility = 'hidden'; // Hide only after animation completes
         }
       });
     }
-  }, [confirmRidePanel]);
+  }, [ridePanel]);
   
   
 
@@ -263,7 +274,13 @@ const UserHome = () => {
               className="bg-[#eee] py-3 px-12 rounded-xl text-base mt-3 w-full"
               placeholder="Add a pick-up location"
             />
-            <div className="line w-1 h-17 left-11 top-24 absolute rounded bg-gray-700"></div>
+            <div className="w-4 absolute left-[10%] top-22">
+            <img className="rounded-full" src="/assets/double-circle.png" alt="" />
+            </div>
+            <div className="line w-1 h-16 left-11 top-25 absolute rounded bg-gray-700"></div>
+            <div className="w-4 absolute left-[10%] bottom-25">
+              <img  src="/assets/double-square.png" alt="" />
+            </div>
             <input
               type="text"
               required
@@ -291,14 +308,13 @@ const UserHome = () => {
       </div>
 
      <div ref={vehiclePanelRef}onClick={()=>{setPanelOpen(false); setVehiclePanelOpen(false)}} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%] ">
-     <VehiclePanel confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} 
-     fare={fare} setFare={setFare}setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/>
+     <VehiclePanel/>
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[80%]" ref={confirmRidePanelRef}>
-      <div onClick={()=>{setConfirmRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[80%]" ref={ridePanelRef}>
+      <div onClick={()=>{setRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
         <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
-     <ConfirmedRide confirmRidePanel={confirmRidePanel} confirmRideVehicleImg={confirmRideVehicleImg} currentAddress={currentAddress}  destinationAddress={destinationAddress} fare={fare} setFare={setFare} setConfirmRidePanel={setConfirmRidePanel} setConfirmRideVehicleImg={setConfirmRideVehicleImg}/> 
+     <ConfirmedRide /> 
      </div>
      <div>
       <LookingForDriver/>
