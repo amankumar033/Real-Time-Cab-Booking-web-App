@@ -1,14 +1,17 @@
 import React from 'react'
-
-const RidePopUp = (props) => {
+import { useEffect } from 'react'
+const FinishRide = (props) => {
+    useEffect(() => {
+      console.log("FinishRide component mounted",props.finishRidePanel)
+    }, [props.finishRidePanel])
+    
   return (
-   
-     <div  className='mt-10 mr-4 ml-4'>
+    <div  className='mt-10 mr-4 ml-4'>
       <div className="text-xl font-bold mb-5">
-        <h1>New Ride Available!</h1>
+        <h1>Finish this Ride</h1>
       </div>  
-      <div className='flex'>
-        <img onClick={()=>{props.setPopUp(false)}} className='w-6 absolute top-2 left-1/2' src="/assets/arrow-down-wide-line.svg" alt="" />
+      <div onClick={()=>{props.setFinishRidePanel(false); console.log(props.finishRidePanel)}} className='flex '>
+        <img  className='w-6 absolute top-2 left-1/2' src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
       <div className='flex justify-between bg-amber-300 rounded-md py-2 px-3 items-center'>
         <div className='flex gap-4 items-center'>
@@ -35,12 +38,11 @@ const RidePopUp = (props) => {
         <h2>Cash</h2>
         </div>
       </div>
-      <button onClick={()=>{props.setAcceptRide(true)}} className='bg-green-500 p-2 rounded-lg  mt-4'>Accept</button>
-      <button onClick={()=>{props.setPopUp(false)}} className='bg-gray-300 p-2 rounded-lg '>Ignore</button>
+      <button onClick={()=>{}} className='bg-green-500 p-2 rounded-lg  mt-4'>Complete Ride</button>
+      
       </div>
     </div>
-
   )
 }
 
-export default RidePopUp
+export default FinishRide

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, } from "react";
 
 const RideContext = createContext();
 
@@ -9,6 +9,8 @@ export const RideProvider = ({ children }) => {
   const [destinationAddress, setDestinationAddress] = useState(null);
   const [fare, setFare] = useState(null);
   const [confirmedRide, setConfirmedRide] = useState(false)
+    const [finishRide, setFinishRide] = useState(false)
+  
   return (
     <RideContext.Provider
       value={{
@@ -22,6 +24,8 @@ export const RideProvider = ({ children }) => {
         setDestinationAddress,
         confirmedRide,
         setConfirmedRide,
+         finishRide,
+        setFinishRide,
         fare,
         setFare,
       }}

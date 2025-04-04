@@ -1,17 +1,18 @@
 import React, { use } from 'react'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import CaptainDetails from '../components/CaptainDetails'
+import { useRideContext } from '../context/RideContext'
 import RidePopUp from '../components/RidePopUp'
 import AcceptRide from '../components/AcceptRide';
 const CaptainHome = () => {
+ 
   const [popUp, setPopUp] = useState(true)
-  const [acceptRide, setAcceptRide] = useState()
+  const [acceptRide, setAcceptRide] = useState(false)
   const popUpRef = useRef(null)
   const acceptRideRef = useRef(null)
-  
+
   useGSAP(() => { 
     if(popUp){
       gsap.to(popUpRef.current, {
@@ -57,6 +58,15 @@ const CaptainHome = () => {
      
     }
   }, [acceptRide])
+  console.log("Accept Ride",acceptRide)
+  useEffect(() => {
+    
+  console.log("Finish Ride",finishRide)
+  
+    }
+ , [finishRide])
+  
+  
   return (
     <div>
         <div className='overflow-hidden h-screen relative'>
@@ -95,16 +105,15 @@ const CaptainHome = () => {
       
         </div>
     </div>
-    <div>
-      <CaptainDetails/>
-    </div>
+
     <div ref={popUpRef} className='bg-white absolute w-full h-[80%] bottom-0'>
       <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide}/>
     </div>
     
-    <div ref={acceptRideRef} className='bg-white absolute w-full h-[80%] bottom-0'>
+    <div ref={acceptRideRef} className='bg-white absolute w-full h-[90%] bottom-0'>
       <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide}/>
     </div>
+    
     </div>
   )
  }
