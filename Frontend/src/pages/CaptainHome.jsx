@@ -5,38 +5,70 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import CaptainDetails from '../components/CaptainDetails'
 import RidePopUp from '../components/RidePopUp'
+import AcceptRide from '../components/AcceptRide';
 const CaptainHome = () => {
   const [popUp, setPopUp] = useState(true)
+  const [acceptRide, setAcceptRide] = useState()
   const popUpRef = useRef(null)
+  const acceptRideRef = useRef(null)
   
   useGSAP(() => { 
     if(popUp){
       gsap.to(popUpRef.current, {
         duration: 1,
-        transform: "translateY(0%)",
+        y:'0%',
+        display:'block',
         ease: "power2.out",
       });
     }
     else{
       gsap.to(popUpRef.current, {
         duration: 1,
-        transform: "translateY(100%)",
+        y:"100%",
+        display: "none",
+        ease: "power2.out",
+      });
+    
+    }
+  }, [popUp])
+  useGSAP(() => { 
+    if(acceptRide){
+      gsap.to(popUpRef.current, {
+        duration: 1,
+        display: "none",
+        ease: "power2.out",
+      });
+      gsap.to(acceptRideRef.current, {
+        duration: 1,
+        display: "block",
+        transform: "translateY(0%)",
+        opacity:1,
         ease: "power2.out",
       });
     }
-  }, [popUp])
+    else{
+      gsap.to(acceptRideRef.current, {
+        duration: 1.5,
+        opacity:0,
+        display: "none",
+        transform: "translateY(100%)",
+        ease: "power2.out",
+      });
+     
+    }
+  }, [acceptRide])
   return (
     <div>
-        <div>
+        <div className='overflow-hidden h-screen relative'>
            <Link to='/captainhome'>
             <img  className='w-12 right-5 top-5 absolute z-10 bg-white p-3 rounded-full' src="/assets/logout-box-r-line.svg" alt="" />
             </Link>
-            <img className='fixed block h-[60%]' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+            <img className='absolute block h-[60%]' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
         </div >
         <div className=' absolute bg-white w-screen bottom-0 h-[38%]  pl-4 pr-4 pt-6 flex  flex-col gap-5'>
         <div className='  flex justify-between'>
           <div className='flex gap-4'>
-        <img className='w--8 h-9 rounded-full top-0 ' src="/assets/profile-pic.jpeg" alt="" />
+        <img className='w-9 h-9 rounded-full top-0 ' src="/assets/profile-pic.jpeg" alt="" />
         <h2 className='font-semibold'>Harsh Patel</h2>
         </div>
         <div className='mr-3'>
@@ -67,10 +99,14 @@ const CaptainHome = () => {
       <CaptainDetails/>
     </div>
     <div ref={popUpRef} className='bg-white absolute w-full h-[80%] bottom-0'>
-      <RidePopUp setPopUp={setPopUp}/>
+      <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide}/>
+    </div>
+    
+    <div ref={acceptRideRef} className='bg-white absolute w-full h-[80%] bottom-0'>
+      <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide}/>
     </div>
     </div>
   )
-}
+ }
 
 export default CaptainHome
