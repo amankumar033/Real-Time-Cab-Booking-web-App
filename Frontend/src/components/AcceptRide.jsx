@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const AcceptRide = (props) => {
   return (
@@ -34,7 +35,9 @@ const AcceptRide = (props) => {
         <h2>Cash</h2>
         </div>
       </div>
-      <button onClick={()=>{console.log("s",confirmedRide)}} className='bg-green-500 p-1 rounded-lg  mt-4'>Confirm</button>
+      <Link to='/captainriding'>
+      <button onClick={()=>{console.log("s",confirmedRide)}} className='bg-green-500 p-1 rounded-lg  mt-4 w-full'>Confirm</button>
+      </Link>
       <button onClick={()=>{props.setAcceptRide(false); console.log(props.acceptRide)}} className='bg-red-600 p-1 rounded-lg '>Cancel</button>
       </div>
     </div>
