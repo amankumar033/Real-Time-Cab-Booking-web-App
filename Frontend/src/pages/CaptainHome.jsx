@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useRideContext } from '../context/RideContext'
 import RidePopUp from '../components/RidePopUp'
 import AcceptRide from '../components/AcceptRide';
 const CaptainHome = () => {
@@ -59,12 +58,7 @@ const CaptainHome = () => {
     }
   }, [acceptRide])
   console.log("Accept Ride",acceptRide)
-  useEffect(() => {
-    
-  console.log("Finish Ride",finishRide)
-  
-    }
- , [finishRide])
+
   
   
   return (

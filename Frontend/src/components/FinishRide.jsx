@@ -1,19 +1,15 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { Link } from 'react-router-dom' 
 const FinishRide = (props) => {
-    useEffect(() => {
-      console.log("FinishRide component mounted",props.finishRidePanel)
-    }, [props.finishRidePanel])
-    
   return (
-    <div  className='mt-10 mr-4 ml-4'>
+    <div  className='mt-10  mr-4 ml-4'>
       <div className="text-xl font-bold mb-5">
         <h1>Finish this Ride</h1>
       </div>  
-      <div onClick={()=>{props.setFinishRidePanel(false); console.log(props.finishRidePanel)}} className='flex '>
+      <div onClick={()=>{props.setFinishRidePanel(true); console.log(props.finishRidePanel)}} className='flex '>
         <img  className='w-6 absolute top-2 left-1/2' src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
-      <div className='flex justify-between bg-amber-300 rounded-md py-2 px-3 items-center'>
+      <div className='flex justify-between bg-yellow-100 rounded-md py-2 px-3 items-center'>
         <div className='flex gap-4 items-center'>
         <img className='w--8 h-9 rounded-full top-0 ' src="/assets/random-people.jpeg" alt="" />
         <h2 className='font-semibold'>Anshvi singh</h2>
@@ -38,8 +34,12 @@ const FinishRide = (props) => {
         <h2>Cash</h2>
         </div>
       </div>
-      <button onClick={()=>{}} className='bg-green-500 p-2 rounded-lg  mt-4'>Complete Ride</button>
-      
+      <Link to='/captainhome' >
+      <button onClick={()=>{}} className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
+      </Link>
+      <div className='flex w-full justify-center'>
+      <p className='text-sm text-red-600'>Finish Ride! only if the destination is reached</p>
+      </div>
       </div>
     </div>
   )
