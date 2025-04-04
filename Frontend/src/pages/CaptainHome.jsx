@@ -1,6 +1,30 @@
-import React from 'react'
+import React, { use } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import CaptainDetails from '../components/CaptainDetails'
+import RidePopUp from '../components/RidePopUp'
 const CaptainHome = () => {
+  const [popUp, setPopUp] = useState(true)
+  const popUpRef = useRef(null)
+  
+  useGSAP(() => { 
+    if(popUp){
+      gsap.to(popUpRef.current, {
+        duration: 1,
+        transform: "translateY(0%)",
+        ease: "power2.out",
+      });
+    }
+    else{
+      gsap.to(popUpRef.current, {
+        duration: 1,
+        transform: "translateY(100%)",
+        ease: "power2.out",
+      });
+    }
+  }, [popUp])
   return (
     <div>
         <div>
@@ -9,7 +33,7 @@ const CaptainHome = () => {
             </Link>
             <img className='fixed block h-[60%]' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
         </div >
-        <div className=' absolute bg-white w-screen bottom-0 h-[40%]  pl-4 pr-4 pt-6 flex  flex-col gap-4'>
+        <div className=' absolute bg-white w-screen bottom-0 h-[38%]  pl-4 pr-4 pt-6 flex  flex-col gap-5'>
         <div className='  flex justify-between'>
           <div className='flex gap-4'>
         <img className='w--8 h-9 rounded-full top-0 ' src="/assets/profile-pic.jpeg" alt="" />
@@ -38,6 +62,12 @@ const CaptainHome = () => {
   </div>
       
         </div>
+    </div>
+    <div>
+      <CaptainDetails/>
+    </div>
+    <div ref={popUpRef} className='bg-white absolute w-full h-[80%] bottom-0'>
+      <RidePopUp setPopUp={setPopUp}/>
     </div>
     </div>
   )
