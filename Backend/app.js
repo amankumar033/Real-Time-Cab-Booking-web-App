@@ -5,6 +5,8 @@ const cors=require("cors")
 const cookieparser=require("cookie-parser")
 const userRoute=require("./routes/userRoute")
 const captainRoute=require("./routes/captainRoute")
+const mapsRoute=require("./routes/mapsRoute")
+
 
 require("dotenv").config(); 
 db();
@@ -22,6 +24,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(cors());
 app.use('/user',userRoute)
 app.use('/captain',captainRoute)
+app.use('/maps',mapsRoute)
 
 app.get('/',(req,res)=>{
     res.send('Hello World')
