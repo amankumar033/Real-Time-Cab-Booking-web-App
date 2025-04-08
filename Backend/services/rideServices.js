@@ -49,6 +49,7 @@ module.exports.getFare = getFare;
 function getOtp(num) {
     function generateOtp(num) {
         const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();
+        console.log("Generated OTP:", otp); 
         return otp;
     }
     return generateOtp(num);
@@ -67,7 +68,7 @@ module.exports.createRide = async ({
 
 
 
-    const ride = rideModel.create({
+    const ride = await rideModel.create({
         user,
         pickup,
         destination,

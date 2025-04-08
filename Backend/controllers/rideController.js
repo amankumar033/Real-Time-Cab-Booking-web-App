@@ -4,7 +4,6 @@ const mapService = require('../services/mapService');
 const { sendMessageToSocketId } = require('../socket');
 const rideModel = require('../models/rideModel');
 
-
 module.exports.createRide = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -14,7 +13,7 @@ module.exports.createRide = async (req, res) => {
     const { userId, pickup, destination, vehicleType } = req.body;
 
     try {
-        const ride = await rideService.createRide({ user: userId, pickup, destination, vehicleType });
+        const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType });
     
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
         const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 2);
@@ -27,8 +26,7 @@ module.exports.createRide = async (req, res) => {
             });
         });
     
-        // finally respond
-        ride.otp = '';
+        
         return res.status(201).json(ride);
     
     } catch (err) {
@@ -126,5 +124,5 @@ module.exports.endRide = async (req, res) => {
         return res.status(200).json(ride);
     } catch (err) {
         return res.status(500).json({ message: err.message });
-    } s
+    } 
 }
