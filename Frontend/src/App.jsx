@@ -15,8 +15,6 @@ import { RideProvider } from './context/RideContext'
 import Riding from './Riding'
 import CaptainRiding from './pages/CaptainRiding'
 
-
-
 const App = () => {
   
   return (
@@ -24,7 +22,8 @@ const App = () => {
       <Route path="/" element={<Start/>} />
       <Route path="/userLogin" element={<UserLogin/>} />
       <Route path="/userSignup" element={<UserSignup/>} />
-      <Route path="/captainSignup" element={<CaptainSignup/>} />
+      <Route path="/captainSignup" element={
+          <CaptainSignup/>} />
       <Route path="/captainLogin" element={<CaptainLogin/>} />
       <Route path='/riding' element={<Riding/>}/>
       <Route path='/captainriding' element={
@@ -42,7 +41,9 @@ const App = () => {
       <Route path="/CaptainHome" element={
         <CaptainProtectWrapper>
         <RideProvider>
+       
           <CaptainHome/>
+          
         </RideProvider>
         </CaptainProtectWrapper>
         } />

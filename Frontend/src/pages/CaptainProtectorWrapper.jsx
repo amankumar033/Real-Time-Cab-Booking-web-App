@@ -6,7 +6,7 @@ import { CaptainDataContext } from '../context/CaptainContext'
 const CaptainProtectWrapper = ({ children }) => {
     const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
-    const { captain, setCaptain } = useContext(CaptainDataContext)
+    const { captain, setCaptain,captainName, setCaptainName } = useContext(CaptainDataContext)
     const token = localStorage.getItem('captainToken')
 
     useEffect(() => {
@@ -24,8 +24,10 @@ const CaptainProtectWrapper = ({ children }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
     
-                console.log("Captain data received:", response.data);
+                console.log("Captain data received:", response.data.captain?.fullname?.firstname);
+                setCaptainName(response.data);
                 setCaptain(response.data);
+               
             } catch (error) {
                 console.error("Error fetching captain data:", error);
                 localStorage.removeItem('captainToken');
@@ -36,9 +38,9 @@ const CaptainProtectWrapper = ({ children }) => {
         };
     
         fetchCaptainData();
-    }, []); // ✅ Only run once
+    }, [token]); 
     
-
+      
     if (isLoading) {
         return <div className='flex justify-center items-center h-screen'>Loading...</div>
     }

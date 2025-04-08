@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import { CaptainDataContext } from '../context/CaptainContext'
 import axios from 'axios'
+import { CaptainDataContext } from '../context/CaptainContext'; 
 
 const CaptainSignup = () => {
+ const { captain, setCaptain,captainName, setCaptainName } = useContext(CaptainDataContext)
+
   const [firstname,setFirstname] = useState('');
   const [lastname,setLastname] = useState('');
   const [email,setEmail] = useState('');
@@ -41,7 +42,7 @@ const CaptainSignup = () => {
     if(response.status === 201){
       const data = response.data;
       setCaptainData(data.captain)
-      console.log("Captain Data  token is dfsdfsdfis :",data.token)
+      console.log("Captain Data  token is:",data.token)
       localStorage.setItem('captainToken',data.token)
       navigate('/CaptainHome')
     }
@@ -54,6 +55,7 @@ const CaptainSignup = () => {
     setVehiclePlate('');
     setVehicleType('');
   }
+  
   return (
     <>
     <div className='p-5  h-screen flex flex-col justify-between'>
@@ -92,7 +94,7 @@ const CaptainSignup = () => {
      </select>
 
       </div>
-      <button className='bg-black text-white rounded py-2 mb-3 font-semibold'>Create Captain Account</button>
+      <button  className='bg-black text-white rounded py-2 mb-3 font-semibold'>Create Captain Account</button>
      </form>
      <p className='text-center' >Already have an account? <Link to={'/captainlogin'} className='text-blue-600'>Login here</Link></p>
      </div>

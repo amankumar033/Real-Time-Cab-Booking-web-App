@@ -1,17 +1,24 @@
-import React, { use } from 'react'
-import { useState, useRef, useEffect } from 'react'
+import React from 'react'
+import { useState, useRef, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import RidePopUp from '../components/RidePopUp'
 import AcceptRide from '../components/AcceptRide';
+import { CaptainDataContext } from '../context/CaptainContext'
+
 const CaptainHome = () => {
- 
+  const { captain,captainName} = useContext(CaptainDataContext)
   const [popUp, setPopUp] = useState(true)
   const [acceptRide, setAcceptRide] = useState(false)
   const popUpRef = useRef(null)
   const acceptRideRef = useRef(null)
 
+  useEffect(() => {
+    console.log("capatin name",captainName.captain.fullname.firstname)
+},[]);
+  
+  
   useGSAP(() => { 
     if(popUp){
       gsap.to(popUpRef.current, {
@@ -73,7 +80,7 @@ const CaptainHome = () => {
         <div className='  flex justify-between'>
           <div className='flex gap-4'>
         <img className='w-9 h-9 rounded-full top-0 ' src="/assets/profile-pic.jpeg" alt="" />
-        <h2 className='font-semibold'>Harsh Patel</h2>
+        <h2 className='font-semibold'>{captainName.captain.fullname.firstname+' '+captainName.captain.fullname.lastname}</h2>
         </div>
         <div className='mr-3'>
         <h2 className='font-bold'>₹295.20</h2>
