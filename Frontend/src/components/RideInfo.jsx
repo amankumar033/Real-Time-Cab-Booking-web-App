@@ -10,6 +10,7 @@ const RideInfo = (props) => {
       setDestinationAddress,
       confirmRideVehicleImg,
       setConfirmRideVehicleImg,
+      confirmedRideVehicle,
       confirmedRide,
       setConfirmedRide,
       fare,
@@ -45,7 +46,9 @@ const RideInfo = (props) => {
         <h2>Cash</h2>
         </div>
       </div>
-      <button onClick={()=>{setConfirmedRide(true);console.log("s",confirmedRide)}} className='bg-green-500 p-1 rounded-lg  mt-auto'>Confirm</button>
+      <button onClick={()=>{setConfirmedRide(true);
+        props.createRide(confirmedRideVehicle)
+      }} className='bg-green-500 p-1 rounded-lg  mt-auto'>Confirm</button>
       </div>
     </div>
   );

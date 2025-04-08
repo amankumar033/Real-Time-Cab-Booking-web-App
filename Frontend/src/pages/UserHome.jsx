@@ -21,6 +21,7 @@ const UserHome = () => {
     confirmRideVehicleImg,
     setConfirmRideVehicleImg,
     confirmedRide,
+    confirmedRideVehicle,
     setConfirmedRide,
     fare,
     setFare
@@ -34,6 +35,8 @@ const UserHome = () => {
   const [accpetedRide, setAcceptedRide] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [lastEditedField, setLastEditedField] = useState("");                                         
+  const [fareCalculate, setFareCalculate] = useState(false);                                         
+  const [fares, setFares] = useState(false);                                         
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -60,7 +63,6 @@ const UserHome = () => {
         const res = await axios.get(`http://localhost:3000/maps/get-suggestions`, {
           params: {
             address: query,
-            key: 'AlzaSyKrgXJ-kImLv6pMi9TUOkxtkkA5bjK2AFg',
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("userToken")}`,
@@ -84,12 +86,62 @@ const UserHome = () => {
     return () => clearTimeout(delayDebounce);
   }, [pickUpLocation, destination, lastEditedField]);
   
-  
+  useEffect(() => {
+    const fetchFare = async () => {
+      try {
+        const fare = await axios.post(
+          `http://localhost:3000/rides/get-fare`,null,
+          {
+            params:{
+            pickup: currentAddress,
+            destination: destinationAddress,
+          },
+        headers: {
+              Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+            },
+          }
+        );
+        setFareCalculate(false)
+        setFares(fare.data)
+        console.log(fare.data);
 
+      } catch (err) {
+        console.error("Error fetching fare:",err);
+      }
+    };
+    
+    if (fareCalculate) {
+      fetchFare();
+    }
+  }, [fareCalculate, currentAddress, destinationAddress]);
 
   useEffect(() => {
    console.log(confirmedRide)
   }, [confirmedRide]);
+
+
+  const createRide = async (vehicleType) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/rides/create`,
+        {
+          pickup: currentAddress,
+          destination: destinationAddress,
+          vehicleType: vehicleType,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        }
+      );
+      console.log("Ride created:", response.data);
+    } catch (err) {
+      console.error("Error creating ride:", err.response?.data || err.message);
+    }
+  };
+  
+
   useGSAP(
     function () {
       if (panelOpen) {
@@ -347,7 +399,6 @@ const UserHome = () => {
             src="/assets/arrow-down-s-line.png"
             alt=""
           />
-
           <form onSubmit={(e) => submitHandler(e)} className="flex flex-col">
             <input
               type="text"
@@ -384,7 +435,7 @@ const UserHome = () => {
               className="bg-[#eee]  rounded-xl text-base mt-4 w-full py-3 px-12"
               placeholder="Enter your destination"
             />
-            <button className="border p-2 w-max mt-5 rounded-xl ">
+            <button onClick={()=>{                setFareCalculate(true);}} className="border p-2 w-max mt-5 rounded-xl ">
               Leave Now
             </button>
           </form>
@@ -392,19 +443,20 @@ const UserHome = () => {
         <div ref={panelRef} className="bg-white h-0 mt-0  ">
           <LocatioSearchPanel
             vehiclePanelOpen={vehiclePanelOpen}
-            setVehiclePanelOpen={setVehiclePanelOpen} suggestions={suggestions}
+            setVehiclePanelOpen={setVehiclePanelOpen} suggestions={suggestions} setPickUpLocation={setPickUpLocation} setDestination={setDestination}
+            lastEditedField={lastEditedField}
           />
         </div>
       </div>
 
      <div ref={vehiclePanelRef}onClick={()=>{setPanelOpen(false); setVehiclePanelOpen(false)}} className="fixed  w-full bottom-0  bg-white px-3 py-6 z-10 flex flex-col gap-4 h-[60%] ">
-     <VehiclePanel/>
+     <VehiclePanel fares={fares}/>
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[80%]" ref={ridePanelRef}>
       <div onClick={()=>{setRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
         <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
-     <RideInfo /> 
+     <RideInfo createRide={createRide}/> 
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[70%]" ref={confirmedRidePanelRef}>
       <LookingForDriver/>

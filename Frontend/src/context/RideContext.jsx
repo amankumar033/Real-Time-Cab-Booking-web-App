@@ -9,6 +9,7 @@ export const RideProvider = ({ children }) => {
   const [destinationAddress, setDestinationAddress] = useState(null);
   const [fare, setFare] = useState(null);
   const [confirmedRide, setConfirmedRide] = useState(false)
+  const [confirmedRideVehicle, setConfirmedRideVehicle] = useState(false)
     const [finishRide, setFinishRide] = useState(false)
   
   return (
@@ -24,6 +25,8 @@ export const RideProvider = ({ children }) => {
         setDestinationAddress,
         confirmedRide,
         setConfirmedRide,
+        confirmedRideVehicle,
+        setConfirmedRideVehicle,
          finishRide,
         setFinishRide,
         fare,

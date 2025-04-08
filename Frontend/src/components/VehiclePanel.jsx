@@ -11,6 +11,7 @@ const VehiclePanel = (props) => {
      setDestinationAddress,
      confirmRideVehicleImg,
      setConfirmRideVehicleImg,
+     setConfirmedRideVehicle,
      fare,
      setFare
    } = useRideContext();
@@ -18,11 +19,14 @@ const VehiclePanel = (props) => {
    useEffect(() => {
     console.log("Updated Image URL:", confirmRideVehicleImg);
   }, [confirmRideVehicleImg]);
+  
   return (
     <div>
       <div className='flex flex-col gap-5'>
         <h2 className="font-bold text-xl mb-3">Choose a Vehicle</h2>
-        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-car.jpeg');setFare('195');}} className="flex active:border-2 rounded-xl flex-row gap-2">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-car.jpeg');
+        setConfirmedRideVehicle('car');
+          setFare(props.fares.car);}} className="flex active:border-2 rounded-xl flex-row gap-2">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -47,11 +51,11 @@ const VehiclePanel = (props) => {
             </div>
           </div>
           <div className="items-center h-full ml-5 mt-6">
-            <h2>₹195</h2>
+            <h2>{props.fares.car}</h2>
           </div>
         </div>
 
-        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-auto.jpeg');setFare('120')}} className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-auto.jpeg'); setConfirmedRideVehicle('auto');setFare(props.fares.auto)}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -76,11 +80,11 @@ const VehiclePanel = (props) => {
             </div>
           </div>
           <div className="items-center h-full ml-1 mt-6">
-            <h2>₹120</h2>
+            <h2>{props.fares.auto}</h2>
           </div>
         </div>
 
-        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-bike.jpeg');setFare('90')}} className="flex active:border-2 rounded-xl flex-row gap-6">
+        <div onClick={()=>{setRidePanel(true); setConfirmRideVehicleImg('/assets/uber-bike.jpeg');setConfirmedRideVehicle('moto');setFare(props.fares.moto)}} className="flex active:border-2 rounded-xl flex-row gap-6">
           <div>
             <img
               className="h-15 rounded-2xl"
@@ -105,7 +109,7 @@ const VehiclePanel = (props) => {
             </div>
           </div>
           <div className="items-center h-full ml-1 mt-6">
-            <h2>₹90</h2>
+            <h2>{props.fares.moto}</h2>
           </div>
         </div>
       </div>
