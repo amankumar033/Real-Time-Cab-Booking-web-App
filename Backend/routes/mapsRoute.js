@@ -6,9 +6,9 @@ const { query } = require('express-validator');
 
 router.get('/get-coordinates',
     query('address').isString().isLength({ min: 3 }),
+    authMiddleware.authUser,
     mapController.getCoordinates
 );
-
 
 router.get('/get-distance-time',
     query('origin').isString().isLength({ min: 3 }),
@@ -18,7 +18,7 @@ router.get('/get-distance-time',
 )
 
 router.get('/get-suggestions',
-    query('input').isString().isLength({ min: 3 }),
+    query('address').isString().isLength({ min: 3 }),
     authMiddleware.authUser,
     mapController.getAutoCompleteSuggestions
 )
