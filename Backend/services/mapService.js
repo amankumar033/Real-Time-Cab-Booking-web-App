@@ -32,7 +32,6 @@ module.exports.getDistanceTime = async (origin, destination) => {
 
     try {
 
-
         const response = await axios.get(url);
         if (response.data.status === 'OK') {
 
@@ -51,41 +50,41 @@ module.exports.getDistanceTime = async (origin, destination) => {
     }
 }
 
-// module.exports.getAutoCompleteSuggestions = async (input) => {
-//     if (!input) {
-//         throw new Error('query is required');
-//     }
+module.exports.getAutoCompleteSuggestions = async (address) => {
+    if (!address) {
+        throw new Error('query is required');
+    }
 
-//     const apiKey = process.env.GOOGLE_MAPS_API;
-//     const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}`;
+    const apiKey = process.env.GOOGLE_MAPS_API;
+    const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(address)}&key=${apiKey}`;
 
-//     try {
-//         const response = await axios.get(url);
-//         if (response.data.status === 'OK') {
-//             return response.data.predictions.map(prediction => prediction.description).filter(value => value);
-//         } else {
-//             throw new Error('Unable to fetch suggestions');
-//         }
-//     } catch (err) {
-//         console.error(err);
-//         throw err;
-//     }
-// }
+    try {
+        const response = await axios.get(url);
+        if (response.data.status === 'OK') {
+            return response.data.predictions.map(prediction => prediction.description).filter(value => value);
+        } else {
+            throw new Error('Unable to fetch suggestions');
+        }
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+}
 
-// module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
+module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
 
-//     // radius in km
-
-
-//     const captains = await captainModel.find({
-//         location: {
-//             $geoWithin: {
-//                 $centerSphere: [ [ ltd, lng ], radius / 6371 ]
-//             }
-//         }
-//     });
-
-//     return captains;
+    // radius in km
 
 
-// }
+    const captains = await captainModel.find({
+        location: {
+            $geoWithin: {
+                $centerSphere: [ [ ltd, lng ], radius / 6371 ]
+            }
+        }
+    });
+
+    return captains;
+
+
+}
