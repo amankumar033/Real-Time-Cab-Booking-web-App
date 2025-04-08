@@ -9,7 +9,7 @@ import VehiclePanel from "../components/VehiclePanel";
 import RideInfo from "../components/RideInfo";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
-
+import axios from "axios"
 const UserHome = () => {
   const {
     ridePanel,
@@ -32,6 +32,8 @@ const UserHome = () => {
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
   const [accpetedRide, setAcceptedRide] = useState(false)
+  const [suggestions, setSuggestions] = useState([])
+  const [lastEditedField, setLastEditedField] = useState("");                                         
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -51,6 +53,40 @@ const UserHome = () => {
     setPickUpLocation("");
     setDestination("");
   };
+
+  useEffect(() => {
+    const fetchSuggestions = async (query) => {
+      try {
+        const res = await axios.get(`http://localhost:3000/maps/get-suggestions`, {
+          params: {
+            address: query,
+            key: 'AlzaSyKrgXJ-kImLv6pMi9TUOkxtkkA5bjK2AFg',
+          },
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          },
+        });
+        setSuggestions(res.data);
+        console.log("Suggestions for:", query, res.data);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+      }
+    };
+  
+    const delayDebounce = setTimeout(() => {
+      if (lastEditedField === "pickup" && pickUpLocation.trim().length > 2) {
+        fetchSuggestions(pickUpLocation);
+      } else if (lastEditedField === "destination" && destination.trim().length > 2) {
+        fetchSuggestions(destination);
+      }
+    }, 300);
+  
+    return () => clearTimeout(delayDebounce);
+  }, [pickUpLocation, destination, lastEditedField]);
+  
+  
+
+
   useEffect(() => {
    console.log(confirmedRide)
   }, [confirmedRide]);
@@ -319,6 +355,7 @@ const UserHome = () => {
               value={pickUpLocation}
               onChange={(e) => {
                 setPickUpLocation(e.target.value);
+                setLastEditedField("pickup");
               }}
               onClick={() => {
                 setPanelOpen(true);
@@ -339,6 +376,7 @@ const UserHome = () => {
               value={destination}
               onChange={(e) => {
                 setDestination(e.target.value);
+                setLastEditedField("destination");
               }}
               onClick={() => {
                 setPanelOpen(true);
@@ -354,7 +392,7 @@ const UserHome = () => {
         <div ref={panelRef} className="bg-white h-0 mt-0  ">
           <LocatioSearchPanel
             vehiclePanelOpen={vehiclePanelOpen}
-            setVehiclePanelOpen={setVehiclePanelOpen}
+            setVehiclePanelOpen={setVehiclePanelOpen} suggestions={suggestions}
           />
         </div>
       </div>
