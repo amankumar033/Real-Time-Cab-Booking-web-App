@@ -17,11 +17,10 @@ const CaptainContext = ({ children }) => {
         isLoading,
         setIsLoading,
         error,
-        captainName, captainName,
         setError,
         updateCaptain,
         captainName,
-         setCaptainName
+        setCaptainName
     };
 
     return (
