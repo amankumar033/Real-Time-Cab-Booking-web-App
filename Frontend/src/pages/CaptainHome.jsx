@@ -20,17 +20,43 @@ const CaptainHome = () => {
     console.log("capatin name",captainName.captain.fullname.firstname)
 },[]);
   
-   useEffect(() => {
-    console.log("emittedonetime",captain.captain._id)
-      if (socket && captain?.captain._id) {
-        socket.emit('join', {
-          userId: captain._id,
-          userType: 'captain'
+useEffect(() => {
+  if (socket && captain?.captain?._id) {
+
+    console.log("emitted one time", captain);
+
+    // Emit join event
+    socket.emit('join', {
+      userId: captain._id,
+      userType: 'captain'
+    });
+    console.log('join event emitted for captain:', captain);
+
+    // Define updateLocation inside the effect
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          socket.emit('update-location-captain', {
+            userId: captain._id,
+            location: {
+              ltd: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+          });
         });
-        console.log('join event emitted for captain:', captain);
-  
       }
-    }, [socket, captain]);
+    };
+
+    const locationInterval = setInterval(updateLocation, 10000);
+
+    return () => clearInterval(locationInterval);
+  }
+}, [socket, captain]);
+
+socket.on('new-ride', (data)=>{
+  console.log(data)
+})
+
   useGSAP(() => { 
     if(popUp){
       gsap.to(popUpRef.current, {

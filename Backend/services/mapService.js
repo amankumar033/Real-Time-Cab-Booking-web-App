@@ -70,7 +70,7 @@ module.exports.getAutoCompleteSuggestions = async (address) => {
         throw err;
     }
 }
-
+   // radius in km 
 module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
     const captains = await captainModel.find({
         location: {
@@ -79,7 +79,6 @@ module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
             }
         }
     });
-
     return captains;
 
 

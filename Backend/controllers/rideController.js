@@ -17,14 +17,17 @@ module.exports.createRide = async (req, res) => {
     
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
         const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 2);
-    
-    
+     
+        console.log(pickupCoordinates)
+       
         captainsInRadius.forEach(captain => {
+            console.log(captain)
             sendMessageToSocketId(captain.socketId, {
                 event: 'new-ride',
                 data: rideWithUser
             });
         });
+        ;
     
         
         return res.status(201).json(ride);
