@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
@@ -10,6 +10,9 @@ import RideInfo from "../components/RideInfo";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver";
 import axios from "axios"
+import { SocketContext } from "../context/SocketContext";
+import {UserDataContext} from '../context/UserContext'
+
 const UserHome = () => {
   const {
     ridePanel,
@@ -18,15 +21,12 @@ const UserHome = () => {
     setCurrentAddress,
     destinationAddress,
     setDestinationAddress,
-    confirmRideVehicleImg,
-    setConfirmRideVehicleImg,
     confirmedRide,
-    confirmedRideVehicle,
-    setConfirmedRide,
-    fare,
-    setFare
   } = useRideContext();
-
+  const{user}=useContext(UserDataContext)
+   
+  const {sendMessage, recieveMessage} = useContext(SocketContext)
+   
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
@@ -56,6 +56,10 @@ const UserHome = () => {
     setPickUpLocation("");
     setDestination("");
   };
+
+  useEffect(()=>{
+      console.log(user)
+  },[user])
 
   useEffect(() => {
     const fetchSuggestions = async (query) => {
