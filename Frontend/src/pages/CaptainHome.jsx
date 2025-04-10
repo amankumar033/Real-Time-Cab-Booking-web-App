@@ -6,8 +6,10 @@ import { gsap } from "gsap";
 import RidePopUp from '../components/RidePopUp'
 import AcceptRide from '../components/AcceptRide';
 import { CaptainDataContext } from '../context/CaptainContext'
+import { SocketContext } from "../context/SocketContext";
 
 const CaptainHome = () => {
+  const{socket}=useContext(SocketContext)
   const { captain,captainName} = useContext(CaptainDataContext)
   const [popUp, setPopUp] = useState(true)
   const [acceptRide, setAcceptRide] = useState(false)
@@ -18,7 +20,17 @@ const CaptainHome = () => {
     console.log("capatin name",captainName.captain.fullname.firstname)
 },[]);
   
+   useEffect(() => {
+    console.log("emittedonetime",captain.captain._id)
+      if (socket && captain?.captain._id) {
+        socket.emit('join', {
+          userId: captain._id,
+          userType: 'captain'
+        });
+        console.log('join event emitted for captain:', captain);
   
+      }
+    }, [socket, captain]);
   useGSAP(() => { 
     if(popUp){
       gsap.to(popUpRef.current, {

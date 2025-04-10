@@ -24,8 +24,7 @@ const UserHome = () => {
     confirmedRide,
   } = useRideContext();
   const{user}=useContext(UserDataContext)
-   
-  const {sendMessage, recieveMessage} = useContext(SocketContext)
+  const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
    
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
@@ -90,6 +89,16 @@ const UserHome = () => {
     return () => clearTimeout(delayDebounce);
   }, [pickUpLocation, destination, lastEditedField]);
   
+  useEffect(() => {
+    if (socket && user?._id) {
+      socket.emit('join', {
+        userId: user._id,
+        userType: 'user'
+      });
+
+      console.log('join event emitted for user:', user);
+    }
+  }, [socket, user]);
   useEffect(() => {
     const fetchFare = async () => {
       try {
