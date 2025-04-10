@@ -11,7 +11,7 @@ router.post("/register",[
      body("vehicle.color").isString().isLength({min:3}).withMessage("Color must be 3 characters long"),
      body("vehicle.plate").isString().isLength({min:3}).withMessage("Plate must be 3 characters long"),
      body("vehicle.capacity").isNumeric().withMessage("Capacity must be a number").custom(value => value > 1) .withMessage("Capacity must be greater than 1"),
-     body("vehicle.vehicleType").isString().isIn(['car','bike','auto']).withMessage("Vehicle type must be car, bike or auto"),
+     body("vehicle.vehicleType").isString().isIn(['car','moto','auto']).withMessage("Vehicle type must be car, moto or auto"),
     //  body("location.lan").isNumeric().withMessage("Lan must be a number"),
     //  body("location.lat").isNumeric().withMessage("Lat must be a number")
     ],captainController.registerCaptain);
