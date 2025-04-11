@@ -15,7 +15,7 @@ const CaptainHome = () => {
   const [acceptRide, setAcceptRide] = useState(false)
   const popUpRef = useRef(null)
   const acceptRideRef = useRef(null)
-
+  const [ride, setRide] = useState(null)
   useEffect(() => {
     console.log("capatin name",captainName.captain.fullname.firstname)
 },[]);
@@ -26,7 +26,7 @@ useEffect(() => {
     console.log("emitted one time", captain);
 
     socket.emit('join', {
-      userId: captain._id,
+      userId: captain?.captain?._id,
       userType: 'captain'
     });
     console.log('join event emitted for captain:', captain);
@@ -50,11 +50,23 @@ useEffect(() => {
     // return () => clearInterval(locationInterval);
   }
 }, [socket, captain]);
+useEffect(() => {
+  if (!socket) return;
 
-socket.on('new-ride', (data)=>{
-  console.log(data)
+  const handleNewRide = (data) => {
+    console.log("Newly ride Data", data);
+    setRide(data);
+    setPopUp(true);
+  };
 
-})
+  socket.on('new-ride', handleNewRide);
+
+  // 🧹 Clean up on unmount or socket change
+  return () => {
+    socket.off('new-ride', handleNewRide);
+  };
+}, [socket]);
+
 
   useGSAP(() => { 
     if(popUp){
@@ -101,7 +113,7 @@ socket.on('new-ride', (data)=>{
      
     }
   }, [acceptRide])
-  console.log("Accept Ride",acceptRide)
+
 
   
   
@@ -145,7 +157,7 @@ socket.on('new-ride', (data)=>{
     </div>
 
     <div ref={popUpRef} className='bg-white absolute w-full h-[80%] bottom-0'>
-      <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide}/>
+      <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide} ride={ride} />
     </div>
     
     <div ref={acceptRideRef} className='bg-white absolute w-full h-[90%] bottom-0'>

@@ -18,9 +18,9 @@ module.exports.createRide = async (req, res) => {
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
         const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 22);
 
-        const rideWithUser = await rideModel.findOne({_id: ride._id}).populate('user', 'phone');
+        const rideWithUser = await rideModel.findOne({_id: ride._id}).populate('user', 'phone fullname');
      
-        console.log("the captains in radius",captainsInRadius,ride)
+        // console.log("the captains in radius",captainsInRadius,ride)
        
         captainsInRadius.forEach(captain => {
             sendMessageToSocketId(captain.socketId, {

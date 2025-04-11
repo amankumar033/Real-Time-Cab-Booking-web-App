@@ -469,7 +469,7 @@ const UserHome = () => {
       <div onClick={()=>{setRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
         <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
-     <RideInfo createRide={createRide}/> 
+     <RideInfo createRide={createRide} /> 
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[70%]" ref={confirmedRidePanelRef}>
       <LookingForDriver/>
