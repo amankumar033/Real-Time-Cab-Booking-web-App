@@ -16,18 +16,17 @@ module.exports.createRide = async (req, res) => {
         const ride = await rideService.createRide({ user: req.user._id, pickup, destination, vehicleType });
     
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
-        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 2);
+        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 22);
      
-        console.log(pickupCoordinates)
+        console.log("the captains in radius",captainsInRadius)
        
         captainsInRadius.forEach(captain => {
-            console.log(captain)
             sendMessageToSocketId(captain.socketId, {
                 event: 'new-ride',
                 data: rideWithUser
             });
         });
-        ;
+        
     
         
         return res.status(201).json(ride);

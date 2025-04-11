@@ -17,21 +17,24 @@ module.exports.registerCaptain = async (req, res) => {
     }
     const hashPassword = await captainModel.hashPassword(password);
     const captain = await captainModel.create({
-      fullname:{
-
-        firstname:fullname.firstname,
-        lastname:fullname.lastname,
+      fullname: {
+        firstname: fullname.firstname,
+        lastname: fullname.lastname,
       },
       email,
-      password:hashPassword,
+      password: hashPassword,
       vehicle,
-      // location,
-      vehicleType:vehicle.vehicleType,
+      location: {
+        type: 'Point',
+        coordinates: [77.2295, 28.6129] // Important: lng comes first
+      },
+      vehicleType: vehicle.vehicleType,
       status,
-      capacity:vehicle.capacity, 
-      color:vehicle.color, 
-      plate:vehicle.plate
+      capacity: vehicle.capacity,
+      color: vehicle.color,
+      plate: vehicle.plate
     });
+    
     console.log("Created Captain debugging:", captain);
     const token=await captain.generateAuthToken();
     res.status(201).json({ captain,token });

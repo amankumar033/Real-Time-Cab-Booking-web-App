@@ -51,17 +51,23 @@ const captainSchema =new  mongoose.Schema({
             enum:['car','moto','auto']
          }
     },
-    // location:{
-    //     lan:{
-    //         type:Number,
-    //     },
-    //     lat:{
-    //         type:Number,
-    //     }
-
-    // }
-
+    location: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          required: true,
+          default: 'Point'
+        },
+        coordinates: {
+          type: [Number], // [lng, lat]
+          required: true
+        }
+      }
+      
+      
+  
 });
+captainSchema.index({ location: '2dsphere' });
 
 captainSchema.methods.generateAuthToken = function () {
     return jwt.sign(
