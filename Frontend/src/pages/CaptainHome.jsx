@@ -25,14 +25,12 @@ useEffect(() => {
 
     console.log("emitted one time", captain);
 
-    // Emit join event
     socket.emit('join', {
       userId: captain._id,
       userType: 'captain'
     });
     console.log('join event emitted for captain:', captain);
 
-    // Define updateLocation inside the effect
     const updateLocation = () => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
@@ -49,12 +47,13 @@ useEffect(() => {
 
     const locationInterval = setInterval(updateLocation, 10000);
 
-    return () => clearInterval(locationInterval);
+    // return () => clearInterval(locationInterval);
   }
 }, [socket, captain]);
 
 socket.on('new-ride', (data)=>{
   console.log(data)
+
 })
 
   useGSAP(() => { 
