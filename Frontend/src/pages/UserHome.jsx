@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { useRideContext } from "../context/RideContext";
 import "remixicon/fonts/remixicon.css";
-import LocatioSearchPanel from "../components/LocatioSearchPanel";
+import LocationSearchPanel from "../components/LocationSearchPanel";
 import VehiclePanel from "../components/VehiclePanel";
 import RideInfo from "../components/RideInfo";
 import LookingForDriver from "../components/LookingForDriver";
@@ -13,6 +13,7 @@ import axios from "axios"
 import { SocketContext } from "../context/SocketContext";
 import {UserDataContext} from '../context/UserContext'
 import { useNavigate } from 'react-router-dom';
+import LiveTracking from "../components/LiveTracking";
 const UserHome = () => {
   const navigate = useNavigate()
   const {
@@ -177,7 +178,6 @@ const UserHome = () => {
     }
   };
   
-
   useGSAP(
     function () {
       if (panelOpen) {
@@ -310,6 +310,7 @@ const UserHome = () => {
         pointerEvents: "none", 
         duration: 0.8,
       });
+
     } else {
       gsap.to(formCloseRef.current, {
         opacity: 1,
@@ -391,25 +392,20 @@ const UserHome = () => {
     <div className="h-screen overflow-hidden relative">
       <img
         ref={uberLogoRef}
-        className="w-16 absolute mb-8 left-5  top-5"
+        className="w-16 absolute mb-8 left-5 z-10 top-5"
         src="/assets/uber_logo.png"
         alt=""
       />
 
-      <div
-        ref={mapOpacityRef}
-        onClick={() => {
-          setMapOpen(true);
-        }}
-        className="h-screen w-screen "
-      >
-        {/* image for temporary use */}
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt="Map Background"
-        />
-      </div>
+<div 
+  ref={mapOpacityRef}
+  className="absolute inset-0 z-0"
+>
+  
+  <LiveTracking mapOpen={mapOpen} ridePanel={ridePanel} />
+</div>
+
+
       <div
         ref={locationPanelCloseRef}
         className="  flex flex-col justify-end bottom-0 absolute  w-full mb-0  "
@@ -420,11 +416,9 @@ const UserHome = () => {
         </div>
 
         <div
-          ref={formCloseRef}
-          className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white relative"
-        >
+          ref={formCloseRef} 
+          className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white  relative">
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
-
           <img
             onClick={() => {            
                 setPanelOpen(false);
@@ -477,7 +471,7 @@ const UserHome = () => {
           </form>
         </div>
         <div ref={panelRef} className="bg-white h-0 mt-0  ">
-          <LocatioSearchPanel
+          <LocationSearchPanel
             vehiclePanelOpen={vehiclePanelOpen}
             setVehiclePanelOpen={setVehiclePanelOpen} suggestions={suggestions} setPickUpLocation={setPickUpLocation} setDestination={setDestination}
             lastEditedField={lastEditedField}

@@ -1,8 +1,18 @@
 import React from 'react'
 import { Link, useLocation} from 'react-router-dom'
+import { useEffect, useContext } from 'react';
+import { SocketContext } from './context/SocketContext';
+import { useNavigate } from 'react-router-dom'
 const Riding = (props) => {
   const location = useLocation();
   const { ride } = location.state || {}  
+  const { socket } = useContext(SocketContext)
+  const navigate = useNavigate()
+
+  socket.on("ride-ended", (data) => {
+      navigate('/userhome')
+  })
+
   return (
     <div className='overflow-hidden flex flex-col h-screen relative'>
         <div>

@@ -1,6 +1,23 @@
 import React from 'react'
 import { Link } from 'react-router-dom' 
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+
+
 const FinishRide = (props) => {
+  const navigate = useNavigate()
+  async function endRide() {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/endride`, {
+        rideId: props.ride._id
+    }, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('captainToken')}`
+        }
+    })
+    if (response.status === 200) {
+        navigate('/captainhome')
+    }
+}
   return (
     <div  className='mt-10  mr-4 ml-4'>
       <div className="text-xl font-bold mb-5">
@@ -35,7 +52,7 @@ const FinishRide = (props) => {
         </div>
       </div>
       <Link to='/captainhome' >
-      <button onClick={()=>{}} className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
+      <button onClick={endRide} className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
       </Link>
       <div className='flex w-full justify-center'>
       <p className='text-sm text-red-600'>Finish Ride! only if the destination is reached</p>
