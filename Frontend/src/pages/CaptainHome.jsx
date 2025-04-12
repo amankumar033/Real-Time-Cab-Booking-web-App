@@ -175,7 +175,7 @@ async function confirmRide() {
     </div>
     
     <div ref={acceptRideRef} className='bg-white absolute w-full h-[90%] bottom-0'>
-      <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide} setPopUp={setPopUp}/>
+      <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide} ride={ride} setPopUp={setPopUp}/>
     </div>
     
     </div>

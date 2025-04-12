@@ -31,7 +31,7 @@ const UserHome = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  const [acceptedRide, setAcceptedRide] = useState(true)
+  const [acceptedRide, setAcceptedRide] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [lastEditedField, setLastEditedField] = useState("");                                         
   const [fareCalculate, setFareCalculate] = useState(false);                                         

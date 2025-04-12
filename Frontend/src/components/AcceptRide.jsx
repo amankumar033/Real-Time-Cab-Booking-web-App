@@ -12,6 +12,7 @@ const AcceptRide = (props) => {
     console.log(otp);
     setOtp("");
   };
+
   return (
     <div className="mt-10 mr-4 ml-4">
       <div className="text-xl font-bold mb-5">
@@ -34,7 +35,7 @@ const AcceptRide = (props) => {
             src="/assets/random-people.jpeg"
             alt=""
           />
-          <h2 className="font-semibold">Anshvi singh</h2>
+          <h2 className="font-semibold">{props?.ride?.user?.fullname?.firstname+" "+props?.ride?.user?.fullname?.lastname}</h2>
         </div>
         <h2 className="font-semibold">2.2 KM</h2>
       </div>
@@ -45,7 +46,7 @@ const AcceptRide = (props) => {
             src="/assets/user-address-map-pin.svg"
             alt=""
           />
-          <h2 className="w-full">562/11-A Kankariya Talab, Bhopal</h2>
+          <h2 className="w-full">{props?.ride?.pickup}</h2>
         </div>
         <div className="line  bg-gray-300 h-[1px] ml-2 mr-2"></div>
         <div className="flex gap-5 ml-4 items-center">
@@ -54,7 +55,7 @@ const AcceptRide = (props) => {
             src="/assets/user-destination-map-pin.svg"
             alt=""
           />
-          <h2 className="">562/11-A Kankariya Talab, Bhopal</h2>
+          <h2 className="">{props?.ride?.destination}</h2>
         </div>
         <div className="line  bg-gray-300 h-[1px] ml-2 mr-2"></div>
         <div className="flex gap-5 ml-4 items-center">
@@ -64,7 +65,7 @@ const AcceptRide = (props) => {
             alt=""
           />
           <div>
-            <h2 className="font-medium">₹192</h2>
+            <h2 className="font-medium">₹{props?.ride?.fare}</h2>
             <h2>Cash</h2>
           </div>
         </div>
