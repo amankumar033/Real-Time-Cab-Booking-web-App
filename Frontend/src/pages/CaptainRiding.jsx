@@ -1,10 +1,13 @@
 import React from 'react'
 import { useRideContext} from '../context/RideContext'
+import { useLocation } from "react-router-dom";
 import FinishRide from '../components/FinishRide'
 import { useRef, useState, useEffect  } from 'react'
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 const CaptainRiding = () => {
+    const location = useLocation();
+  const ride = location.state?.ride;
   const {finishRide,setFinishRide} = useRideContext()
   const [finishRidePanel,setFinishRidePanel]=useState(true)
   const finishRideRef = useRef(null)
@@ -62,7 +65,7 @@ const CaptainRiding = () => {
             <button onClick={()=>{setFinishRide(true);setFinishRidePanel(false);console.log(finishRide)}} className='bg-green-600 text-white py-2 px-8 rounded-lg'>Complete Ride</button>
         </div>
         <div ref={finishRideRef} className='absolute bottom-0 w-screen bg-white h-[80%] rounded-tl-3xl rounded-tr-3xl pt-5 pl-4 pr-4 flex flex-col gap-5'>
-      <FinishRide setFinishRidePanel={setFinishRidePanel} finishRidePanel={finishRidePanel}/>
+      <FinishRide setFinishRidePanel={setFinishRidePanel} ride={ride} finishRidePanel={finishRidePanel}/>
     </div>
     </div>
   )
