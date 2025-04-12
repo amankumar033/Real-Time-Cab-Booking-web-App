@@ -429,7 +429,7 @@ The request body should be in JSON format and include the following fields:
 ```
 
 
-## `/rides/get-fare` Endpoint
+## `/rides/getfare` Endpoint
 
 ### Description
 
@@ -456,7 +456,7 @@ er <token>`
 ### Example Request
 
 ```
-GET /rides/get-fare?pickup=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA
+GET /rides/getfare?pickup=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA
 ```
 
 ### Example Response

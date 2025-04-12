@@ -110,7 +110,7 @@ const UserHome = () => {
     const fetchFare = async () => {
       try {
         const fare = await axios.post(
-          `http://localhost:3000/rides/get-fare`,null,
+          `http://localhost:3000/rides/getfare`,null,
           {
             params:{
             pickup: currentAddress,
