@@ -11,7 +11,7 @@ import { SocketContext } from "../context/SocketContext";
 const CaptainHome = () => {
   const{socket}=useContext(SocketContext)
   const { captain,captainName} = useContext(CaptainDataContext)
-  const [popUp, setPopUp] = useState(true)
+  const [popUp, setPopUp] = useState(false)
   const [acceptRide, setAcceptRide] = useState(false)
   const popUpRef = useRef(null)
   const acceptRideRef = useRef(null)
