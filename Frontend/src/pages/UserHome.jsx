@@ -31,7 +31,7 @@ const UserHome = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  const [acceptedRide, setAcceptedRide] = useState(false)
+  const [acceptedRide, setAcceptedRide] = useState(true)
   const [suggestions, setSuggestions] = useState([])
   const [lastEditedField, setLastEditedField] = useState("");                                         
   const [fareCalculate, setFareCalculate] = useState(false);                                         
@@ -142,7 +142,7 @@ const UserHome = () => {
     const handler = (ride) => {
       console.log("Ride confirmed event received:", ride);
       setAcceptedRide(true);
-      
+      setRide(ride)
 
     };
   
@@ -494,7 +494,7 @@ const UserHome = () => {
       <LookingForDriver/>
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[68%]" ref={acceptedRidePanelRef}>
-      <WaitingForDriver/>
+      <WaitingForDriver ride={ride}/>
      </div>
     </div>
   );
