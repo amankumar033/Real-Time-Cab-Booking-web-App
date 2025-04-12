@@ -21,10 +21,10 @@ function initializeSocket(server) {
 
             if (userType === 'user') {
                 await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
-                console.log("User Socket ID Updated")
+                // console.log("User Socket ID Updated")
             } else if (userType === 'captain') {
                 await captainModel.findByIdAndUpdate(userId, { socketId: socket.id });
-                console.log("Captain Socket ID Updated")
+                // console.log("Captain Socket ID Updated")
             }
         });
 

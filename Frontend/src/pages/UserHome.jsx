@@ -25,17 +25,19 @@ const UserHome = () => {
   } = useRideContext();
   const{user}=useContext(UserDataContext)
   const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
-   
+  const [ waitingForDriver, setWaitingForDriver ] = useState(false)
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
   const [mapOpen, setMapOpen] = useState(false);
-  const [accpetedRide, setAcceptedRide] = useState(false)
+  const [acceptedRide, setAcceptedRide] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [lastEditedField, setLastEditedField] = useState("");                                         
   const [fareCalculate, setFareCalculate] = useState(false);                                         
-  const [fares, setFares] = useState(false);                                         
+  const [fares, setFares] = useState(false);    
+  const [ ride, setRide ] = useState(null)
+  const [ vehicleFound, setVehicleFound ] = useState(false)                              
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -89,6 +91,7 @@ const UserHome = () => {
     return () => clearTimeout(delayDebounce);
   }, [pickUpLocation, destination, lastEditedField]);
   
+
   useEffect(() => {
     if (socket && user?._id) {
       socket.emit('join', {
@@ -132,6 +135,22 @@ const UserHome = () => {
    console.log(confirmedRide)
   }, [confirmedRide]);
 
+  useEffect(() => {
+    
+    if (!socket) return;
+  
+    const handler = (ride) => {
+      console.log("Ride confirmed event received:", ride);
+      setAcceptedRide(true);
+      
+
+    };
+  
+    socket.on('ride-confirmed', handler)
+    return () => {
+      socket.off('ride-confirmed', handler);
+    };
+  }, [socket]);
 
   const createRide = async (vehicleType) => {
     try {
@@ -341,7 +360,7 @@ const UserHome = () => {
     }
   }, [confirmedRide]);
   useGSAP(() => {
-    if (accpetedRide) {
+    if (acceptedRide) {
       gsap.to(acceptedRidePanelRef.current, {
         transform:'translateY(0)',
         duration:1.1,
@@ -360,7 +379,7 @@ const UserHome = () => {
       });
       
     }
-  }, [acceptedRidePanelRef]);
+  }, [acceptedRide]);
   
   
 

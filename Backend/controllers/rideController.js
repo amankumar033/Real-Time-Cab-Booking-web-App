@@ -17,7 +17,6 @@ module.exports.createRide = async (req, res) => {
     
         const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
         const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.lat, pickupCoordinates.lng, 22);
-
         const rideWithUser = await rideModel.findOne({_id: ride._id}).populate('user', 'phone fullname');
      
         // console.log("the captains in radius",captainsInRadius,ride)
@@ -66,10 +65,10 @@ module.exports.confirmRide = async (req, res) => {
     }
 
     const { rideId } = req.body;
-
+  console.log("the ride id is defined as",rideId)
     try {
         const ride = await rideService.confirmRide({ rideId, captain: req.captain });
-
+        console.log("the use socket id is",ride.user.socketId)
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-confirmed',
             data: ride
@@ -94,7 +93,7 @@ module.exports.startRide = async (req, res) => {
     try {
         const ride = await rideService.startRide({ rideId, otp, captain: req.captain });
 
-        console.log(ride);
+        // console.log(ride);
 
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-started',

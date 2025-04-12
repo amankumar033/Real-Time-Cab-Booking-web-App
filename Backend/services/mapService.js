@@ -72,7 +72,7 @@ module.exports.getAutoCompleteSuggestions = async (address) => {
 }
    // radius in km 
 module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
-    console.log("request came with",lat,lng,radius)
+    // console.log("request came with",lat,lng,radius)
     const captains = await captainModel.find({
         location: {
             $geoWithin: {
@@ -80,7 +80,7 @@ module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
             }
         }
     });
-    console.log(captains)
+    // console.log(captains)
     return captains;
 
 

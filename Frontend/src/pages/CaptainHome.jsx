@@ -7,7 +7,7 @@ import RidePopUp from '../components/RidePopUp'
 import AcceptRide from '../components/AcceptRide';
 import { CaptainDataContext } from '../context/CaptainContext'
 import { SocketContext } from "../context/SocketContext";
-
+import axios from "axios"
 const CaptainHome = () => {
   const{socket}=useContext(SocketContext)
   const { captain,captainName} = useContext(CaptainDataContext)
@@ -19,7 +19,7 @@ const CaptainHome = () => {
   useEffect(() => {
     console.log("capatin name",captainName.captain.fullname.firstname)
 },[]);
-  
+
 useEffect(() => {
   if (socket && captain?.captain?._id) {
 
@@ -60,12 +60,26 @@ useEffect(() => {
   };
 
   socket.on('new-ride', handleNewRide);
-
-  // 🧹 Clean up on unmount or socket change
   return () => {
     socket.off('new-ride', handleNewRide);
   };
 }, [socket]);
+
+async function confirmRide() {
+
+  const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`, {
+
+      rideId: ride._id,
+      captainId: captain._id,
+  }, {
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('captainToken')}`
+      }
+  })
+
+  setPopUp(false)
+
+}
 
 
   useGSAP(() => { 
@@ -157,11 +171,11 @@ useEffect(() => {
     </div>
 
     <div ref={popUpRef} className='bg-white absolute w-full h-[80%] bottom-0'>
-      <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide} ride={ride} />
+      <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide} ride={ride} confirmRide={confirmRide}/>
     </div>
     
     <div ref={acceptRideRef} className='bg-white absolute w-full h-[90%] bottom-0'>
-      <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide}/>
+      <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide} setPopUp={setPopUp}/>
     </div>
     
     </div>

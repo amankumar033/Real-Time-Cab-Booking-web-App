@@ -41,7 +41,7 @@ module.exports.loginUser = async (req,res,next)=>{
         return res.status(400).json({message:"Invalid Password"});
     }
     const token = captain.generateAuthToken();
-    console.log("this is ",token);
+    // console.log("this is ",token);
     res.cookie('token', token)
 
     if(captain && isMatch){
