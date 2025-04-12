@@ -12,8 +12,9 @@ import WaitingForDriver from "../components/WaitingForDriver";
 import axios from "axios"
 import { SocketContext } from "../context/SocketContext";
 import {UserDataContext} from '../context/UserContext'
-
+import { useNavigate } from 'react-router-dom';
 const UserHome = () => {
+  const navigate = useNavigate()
   const {
     ridePanel,
     setRidePanel,
@@ -90,7 +91,10 @@ const UserHome = () => {
   
     return () => clearTimeout(delayDebounce);
   }, [pickUpLocation, destination, lastEditedField]);
-  
+
+  socket.on('ridestarted', ride => {                          
+    navigate('/riding', { state: { ride } }) 
+})
 
   useEffect(() => {
     if (socket && user?._id) {

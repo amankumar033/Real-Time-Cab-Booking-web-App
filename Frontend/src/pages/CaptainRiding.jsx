@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import { useRideContext} from '../context/RideContext'
 import FinishRide from '../components/FinishRide'
 import { useRef, useState, useEffect  } from 'react'

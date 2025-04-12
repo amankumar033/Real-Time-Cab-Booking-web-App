@@ -2,17 +2,28 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from 'axios'
 const AcceptRide = (props) => {
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
-    navigate("/captainriding");
-    console.log("OTP Submitted");
-    console.log(otp);
-    setOtp("");
-  };
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/startride`, {
+      params: {
+          rideId: props.ride._id,
+          otp: otp
+      },
+      headers: {
+          Authorization: `Bearer ${localStorage.getItem('captainToken')}`
+      }
+  })
 
+  if (response.status === 200) {
+      navigate('/captainriding', { state: { ride: props.ride } })
+  }
+  };
+  
+  
   return (
     <div className="mt-10 mr-4 ml-4">
       <div className="text-xl font-bold mb-5">

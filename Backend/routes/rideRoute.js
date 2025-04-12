@@ -24,14 +24,14 @@ router.post('/confirm',
     rideController.confirmRide
 )
 
-router.get('/start-ride',
+router.get('/startride',
     authMiddleware.authCaptain,
     query('rideId').isMongoId().withMessage('Invalid ride id'),
     query('otp').isString().isLength({ min: 6, max: 6 }).withMessage('Invalid OTP'),
     rideController.startRide
 )
 
-router.post('/end-ride',
+router.post('/endride',
     authMiddleware.authCaptain,
     body('rideId').isMongoId().withMessage('Invalid ride id'),
     rideController.endRide
