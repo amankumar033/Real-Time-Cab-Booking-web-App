@@ -38,8 +38,8 @@ const UserHome = () => {
   const [lastEditedField, setLastEditedField] = useState("");                                         
   const [fareCalculate, setFareCalculate] = useState(false);                                         
   const [fares, setFares] = useState(false);    
-  const [ ride, setRide ] = useState(null)
-  const [ vehicleFound, setVehicleFound ] = useState(false)                              
+  const [ ride, setRide ] = useState(null)                           
+  const [currentLiveLocation, setCurrentLiveLocation]= useState(false)
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -96,6 +96,11 @@ const UserHome = () => {
   socket.on('ridestarted', ride => {                          
     navigate('/riding', { state: { ride } }) 
 })
+
+useEffect(()=>{
+setPickUpLocation(currentAddress)
+},[currentAddress])
+
 
   useEffect(() => {
     if (socket && user?._id) {
@@ -401,8 +406,7 @@ const UserHome = () => {
   ref={mapOpacityRef}
   className="absolute inset-0 z-0"
 >
-  
-  <LiveTracking mapOpen={mapOpen} ridePanel={ridePanel} />
+  <LiveTracking currentLiveLocation={currentLiveLocation} setCurrentLiveLocation={setCurrentLiveLocation} setCurrentAddress={setCurrentAddress} currentAddress={currentAddress}/>
 </div>
 
 
@@ -419,6 +423,7 @@ const UserHome = () => {
           ref={formCloseRef} 
           className="h-[40%] rounded-tl-2xl rounded-tr-xl p-5 bg-white  relative">
           <h1 className="text-xl font-semibold mb-3">Find a trip</h1>
+          
           <img
             onClick={() => {            
                 setPanelOpen(false);
@@ -429,6 +434,7 @@ const UserHome = () => {
             src="/assets/arrow-down-s-line.png"
             alt=""
           />
+          <div onClick={()=>{setCurrentLiveLocation(true)}} className="absolute top-20 right-8 bg-white rounded-full p-1">📍</div>
           <form onSubmit={(e) => submitHandler(e)} className="flex flex-col">
             <input
               type="text"
@@ -465,9 +471,13 @@ const UserHome = () => {
               className="bg-[#eee]  rounded-xl text-base mt-4 w-full py-3 px-12"
               placeholder="Enter your destination"
             />
-            <button onClick={()=>{                setFareCalculate(true);}} className="border p-2 w-max mt-5 rounded-xl ">
+  <button onClick={()=>{  setFareCalculate(true);}} className="border p-2 w-max mt-5 rounded-xl ">
               Leave Now
             </button>
+            <div>
+    
+          </div>
+         
           </form>
         </div>
         <div ref={panelRef} className="bg-white h-0 mt-0  ">
@@ -492,7 +502,7 @@ const UserHome = () => {
       <LookingForDriver/>
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[68%]" ref={acceptedRidePanelRef}>
-      <WaitingForDriver ride={ride}/>
+      <WaitingForDriver  ride={ride}/>
      </div>
     </div>
   );

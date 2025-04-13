@@ -5,7 +5,7 @@ const RideContext = createContext();
 export const RideProvider = ({ children }) => {
   const [ridePanel, setRidePanel] = useState(false);
   const [confirmRideVehicleImg, setConfirmRideVehicleImg] = useState(null);
-  const [currentAddress, setCurrentAddress] = useState(null);
+  const [currentAddress, setCurrentAddress] = useState('');
   const [destinationAddress, setDestinationAddress] = useState(null);
   const [fare, setFare] = useState(null);
   const [confirmedRide, setConfirmedRide] = useState(false)

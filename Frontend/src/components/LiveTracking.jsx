@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-
+import axios from 'axios'
 // Import marker images
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -15,10 +15,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const LiveTracking = ({ mapOpen }) => {
+const LiveTracking = (props) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
-  const [position, setPosition] = useState({ lat: 12.9716, lng: 77.5946 });
+  const [position, setPosition] = useState({ lat:0, lng:0});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -124,6 +124,50 @@ const LiveTracking = ({ mapOpen }) => {
       mapRef.current = null;
     };
   }, [position, loading]);
+  const reverseGeocode = async (lat, lng) => {
+    try {
+      const res = await axios.get('https://nominatim.openstreetmap.org/reverse', {
+        params: {
+          lat,
+          lon: lng,
+          format: 'jsonv2',
+        },
+        headers: {
+          'Accept-Language': 'en', 
+        }
+      });
+  
+      const address = res.data.display_name || 'Address not found';
+      console.log('Address:', address);
+      return address; // <-- RETURN THE ADDRESS HERE!
+    } catch (err) {
+      console.error('Reverse geocoding failed:', err);
+      return 'Error fetching address'; // <-- also return something on error
+    }
+  };
+  
+  
+  useEffect(() => {
+    if (!props.currentLiveLocation) return;
+  
+    const { lat, lng } = position;
+  
+    const fetchAddress = async () => {
+      const address = await reverseGeocode(lat, lng);
+      props.setCurrentAddress(address); // only set after the result is fetched
+    };
+  
+    fetchAddress(); // call the async function
+  
+    props.setCurrentLiveLocation(false);
+  }, [props.currentLiveLocation]);
+  
+  
+
+useEffect(()=>{
+  console.log("the live tracking useeffect is ",props.currentAddress)
+},[props.currentAddress])
+
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -142,21 +186,13 @@ const LiveTracking = ({ mapOpen }) => {
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
-
-  useEffect(() => {
-    if (mapRef.current) {
-      const timer = setTimeout(() => {
-        mapRef.current.invalidateSize();
-      }, 300);
-
-      return () => clearTimeout(timer);
-    }
-  }, [mapOpen]);
+ 
+  
 
   return (
     <div
       id="map"
-      className={`w-full h-full ${mapOpen ? 'pointer-events-none' : 'pointer-events-auto'}`}
+      className="w-full h-full"
       style={{ position: 'relative' }}
     >
       {error && <div className="error-message">{error}</div>}
