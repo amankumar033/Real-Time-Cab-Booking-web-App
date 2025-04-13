@@ -3,6 +3,7 @@ import { Link, useLocation} from 'react-router-dom'
 import { useEffect, useContext } from 'react';
 import { SocketContext } from './context/SocketContext';
 import { useNavigate } from 'react-router-dom'
+import LiveTracking from './components/LiveTracking';
 const Riding = (props) => {
   const location = useLocation();
   const { ride } = location.state || {}  
@@ -16,10 +17,14 @@ const Riding = (props) => {
   return (
     <div className='overflow-hidden flex flex-col h-screen relative'>
         <div>
+          <img className='w-16 absolute mb-8 left-5 z-10 top-5' src="/assets/uber_logo.png" alt="" />
            <Link to='/userhome'>
             <img  className='w-12 right-5 top-5 absolute z-10 rounded-full' src="/assets/home-icon.jpeg" alt="" />
             </Link>
-            <img className='fixed block' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+            <div className="h-[60vh] w-full relative z-0">
+  <LiveTracking />
+</div>
+
         </div>
         <div className='absolute bg-white w-screen bottom-0'>
         <div className=' h-[50%] m-3 mb-8'>

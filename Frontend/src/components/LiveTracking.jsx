@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import axios from 'axios'
-// Import marker images
+import axios from 'axios';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Fix missing icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -15,10 +13,10 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const LiveTracking = (props) => {
+const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
-  const [position, setPosition] = useState({ lat:0, lng:0});
+  const [position, setPosition] = useState({ lat: 0, lng: 0 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,7 +33,6 @@ const LiveTracking = (props) => {
     const marker = L.marker([position.lat, position.lng]).addTo(map);
     markerRef.current = marker;
 
-    // Create custom locate button
     const locateButton = L.control({ position: 'bottomright' });
     locateButton.onAdd = function () {
       const button = L.DomUtil.create('button', 'leaflet-bar');
@@ -45,19 +42,16 @@ const LiveTracking = (props) => {
       button.style.backgroundColor = 'white';
       button.style.border = 'none';
       button.style.padding = '4px';
-      button.style.borderRadius = '4px';
+      button.style.borderRadius = '22px';
       button.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
       button.style.zIndex = '1000';
       button.style.fontSize = '25px';
-      button.style.borderRadius = '22px';
 
-       
       button.onclick = () => {
         if (loading) return;
         setLoading(true);
         button.innerHTML = '⏳';
 
-        // Check for geolocation support
         if (!navigator.geolocation) {
           setError('Geolocation is not supported by your browser.');
           setLoading(false);
@@ -80,7 +74,6 @@ const LiveTracking = (props) => {
             button.innerHTML = '📍';
           },
           (err) => {
-            console.error('Geolocation error:', err);
             setLoading(false);
             button.innerHTML = '📍';
             switch (err.code) {
@@ -99,7 +92,7 @@ const LiveTracking = (props) => {
           },
           {
             enableHighAccuracy: true,
-            timeout: 20000, // Timeout set to 20 seconds
+            timeout: 20000,
             maximumAge: 10000,
           }
         );
@@ -114,16 +107,18 @@ const LiveTracking = (props) => {
     buttonContainer.style.bottom = '270px';
     buttonContainer.style.right = '20px';
     buttonContainer.style.zIndex = '1000';
-    
+
     const zoomControl = map.zoomControl;
     zoomControl.setPosition('topleft');
     zoomControl.getContainer().style.top = '60px';
     zoomControl.getContainer().style.left = '10px';
+
     return () => {
       map.remove();
       mapRef.current = null;
     };
   }, [position, loading]);
+
   const reverseGeocode = async (lat, lng) => {
     try {
       const res = await axios.get('https://nominatim.openstreetmap.org/reverse', {
@@ -133,41 +128,29 @@ const LiveTracking = (props) => {
           format: 'jsonv2',
         },
         headers: {
-          'Accept-Language': 'en', 
+          'Accept-Language': 'en',
         }
       });
-  
       const address = res.data.display_name || 'Address not found';
-      console.log('Address:', address);
-      return address; // <-- RETURN THE ADDRESS HERE!
+      return address;
     } catch (err) {
-      console.error('Reverse geocoding failed:', err);
-      return 'Error fetching address'; // <-- also return something on error
+      return 'Error fetching address';
     }
   };
-  
-  
+
   useEffect(() => {
-    if (!props.currentLiveLocation) return;
-  
+    if (!currentLiveLocation || !setCurrentAddress || !setCurrentLiveLocation) return;
+
     const { lat, lng } = position;
-  
+
     const fetchAddress = async () => {
       const address = await reverseGeocode(lat, lng);
-      props.setCurrentAddress(address); // only set after the result is fetched
+      setCurrentAddress(address);
     };
-  
-    fetchAddress(); // call the async function
-  
-    props.setCurrentLiveLocation(false);
-  }, [props.currentLiveLocation]);
-  
-  
 
-useEffect(()=>{
-  console.log("the live tracking useeffect is ",props.currentAddress)
-},[props.currentAddress])
-
+    fetchAddress();
+    setCurrentLiveLocation(false);
+  }, [currentLiveLocation]);
 
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
@@ -186,8 +169,6 @@ useEffect(()=>{
 
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
- 
-  
 
   return (
     <div
