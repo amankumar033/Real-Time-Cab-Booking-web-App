@@ -8,6 +8,7 @@ import AcceptRide from '../components/AcceptRide';
 import { CaptainDataContext } from '../context/CaptainContext'
 import { SocketContext } from "../context/SocketContext";
 import axios from "axios"
+import LiveTracking from '../components/LiveTracking';
 const CaptainHome = () => {
   const{socket}=useContext(SocketContext)
   const { captain,captainName} = useContext(CaptainDataContext)
@@ -137,7 +138,9 @@ async function confirmRide() {
            <Link to='/captainhome'>
             <img  className='w-12 right-5 top-5 absolute z-10 bg-white p-3 rounded-full' src="/assets/logout-box-r-line.svg" alt="" />
             </Link>
-            <img className='absolute block h-[60%]' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+            <div className='absolute z-0 inset-0 '>
+            <LiveTracking/>
+            </div>
         </div >
         <div className=' absolute bg-white w-screen bottom-0 h-[38%]  pl-4 pr-4 pt-6 flex  flex-col gap-5'>
         <div className='  flex justify-between'>

@@ -390,8 +390,6 @@ setPickUpLocation(currentAddress)
       
     }
   }, [acceptedRide]);
-  
-  
 
   return (
     <div className="h-screen overflow-hidden relative">
@@ -408,7 +406,6 @@ setPickUpLocation(currentAddress)
 >
   <LiveTracking currentLiveLocation={currentLiveLocation} setCurrentLiveLocation={setCurrentLiveLocation} setCurrentAddress={setCurrentAddress} currentAddress={currentAddress}/>
 </div>
-
 
       <div
         ref={locationPanelCloseRef}

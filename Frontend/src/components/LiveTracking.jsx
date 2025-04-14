@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress }) => {
+const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress, locationMarkerPos }) => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
@@ -104,8 +104,8 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
 
     const buttonContainer = locateButton.getContainer();
     buttonContainer.style.position = 'absolute';
-    buttonContainer.style.bottom = '270px';
-    buttonContainer.style.right = '20px';
+    buttonContainer.style.bottom = locationMarkerPos ? '148px':'260px';
+    buttonContainer.style.right = '13px';
     buttonContainer.style.zIndex = '1000';
 
     const zoomControl = map.zoomControl;

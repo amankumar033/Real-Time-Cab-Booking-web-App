@@ -19,7 +19,7 @@ const FinishRide = (props) => {
     }
 }
   return (
-    <div  className='mt-10  mr-4 ml-4'>
+    <div  className='mt-10  mr-4 ml-4 '>
       <div className="text-xl font-bold mb-5">
         <h1>Finish this Ride</h1>
       </div>  
@@ -52,7 +52,7 @@ const FinishRide = (props) => {
         </div>
       </div>
       <Link to='/captainhome' >
-      <button onClick={endRide} className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
+      <button onClick={()=>{endRide;props.setLocationMarkerPos(false) }}className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
       </Link>
       <div className='flex w-full justify-center'>
       <p className='text-sm text-red-600'>Finish Ride! only if the destination is reached</p>
