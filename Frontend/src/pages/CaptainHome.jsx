@@ -139,7 +139,7 @@ async function confirmRide() {
             <img  className='w-12 right-5 top-5 absolute z-10 bg-white p-3 rounded-full' src="/assets/logout-box-r-line.svg" alt="" />
             </Link>
             <div className='absolute z-0 inset-0 '>
-            <LiveTracking captainLocation={captainLocation}/>
+            <LiveTracking/>
             </div>
         </div >
         <div className=' absolute bg-white w-screen bottom-0 h-[38%]  pl-4 pr-4 pt-6 flex  flex-col gap-5'>
