@@ -13,12 +13,72 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress, locationMarkerPos }) => {
+// Custom Icons
+const userIcon = L.icon({
+  iconUrl: '/assets/user-destination-map-pin.svg', // Add your custom user icon here
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+});
+
+const captainIcon = L.icon({
+  iconUrl: '/assets/user-address-map-pin.svg', // Use your custom captain icon here
+  iconSize: [50, 50],
+  iconAnchor: [50, 50],
+});
+
+const LiveTracking = ({
+  captainLocation,
+  currentLiveLocation = false,
+  setCurrentLiveLocation,
+  setCurrentAddress,
+  locationMarkerPos
+}) => {
+  const captainMarkerRef = useRef(null);
   const mapRef = useRef(null);
-  const markerRef = useRef(null);
+  const userMarkerRef = useRef(null);
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Debugging: Check if captainLocation is passed correctly
+  useEffect(() => {
+    console.log("Captain Location:", captainLocation);  // Debug log
+  }, [captainLocation]);
+
+  // Initialize the map and add markers for user and captain
+  useEffect(() => {
+    if (captainLocation && mapRef.current) {
+      console.log("Adding captain marker...");
+
+      // Ensure captainLocation is valid
+      if (!captainLocation.lat || !captainLocation.lng) {
+        console.error('Invalid captain location:', captainLocation);  // Log error if location is invalid
+        return;
+      }
+
+      if (!captainMarkerRef.current) {
+        const offset = 0.00005; // Offset slightly if user and captain are at the same location
+        const lat = captainLocation.lat;
+        const lng = captainLocation.lng + offset;  // Add offset to prevent overlap
+
+        const marker = L.marker([lat, lng], {
+          icon: captainIcon,
+        })
+          .addTo(mapRef.current)
+          .bindTooltip('Captain', { permanent: true, direction: 'top' });
+
+        captainMarkerRef.current = marker;
+      } else {
+        // Update captain marker location
+        captainMarkerRef.current.setLatLng([
+          captainLocation.lat,
+          captainLocation.lng + 0.00005, // Slightly offset to avoid overlap
+        ]);
+      }
+    } else {
+      console.log("Waiting for captainLocation...");
+    }
+  }, [captainLocation]);
 
   useEffect(() => {
     if (mapRef.current !== null) return;
@@ -30,8 +90,14 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(map);
 
-    const marker = L.marker([position.lat, position.lng]).addTo(map);
-    markerRef.current = marker;
+    // Add the user marker
+    const userMarker = L.marker([position.lat, position.lng], {
+      icon: userIcon,
+    })
+      .addTo(map)
+      .bindTooltip('You', { permanent: true, direction: 'top' });
+
+    userMarkerRef.current = userMarker;
 
     const locateButton = L.control({ position: 'bottomright' });
     locateButton.onAdd = function () {
@@ -69,7 +135,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
               const currentZoom = mapRef.current.getZoom();
               mapRef.current.setView(newPos, currentZoom);
             }
-            if (markerRef.current) markerRef.current.setLatLng(newPos);
+            if (userMarkerRef.current) userMarkerRef.current.setLatLng(newPos);
             setLoading(false);
             button.innerHTML = '📍';
           },
@@ -104,7 +170,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
 
     const buttonContainer = locateButton.getContainer();
     buttonContainer.style.position = 'absolute';
-    buttonContainer.style.bottom = locationMarkerPos ? '148px':'260px';
+    buttonContainer.style.bottom = locationMarkerPos ? '148px' : '260px';
     buttonContainer.style.right = '13px';
     buttonContainer.style.zIndex = '1000';
 
@@ -129,7 +195,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
         },
         headers: {
           'Accept-Language': 'en',
-        }
+        },
       });
       const address = res.data.display_name || 'Address not found';
       return address;
@@ -157,7 +223,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
       ({ coords }) => {
         const newPos = { lat: coords.latitude, lng: coords.longitude };
         setPosition(newPos);
-        if (markerRef.current) markerRef.current.setLatLng(newPos);
+        if (userMarkerRef.current) userMarkerRef.current.setLatLng(newPos);
         if (mapRef.current) {
           const currentZoom = mapRef.current.getZoom();
           mapRef.current.setView(newPos, currentZoom);

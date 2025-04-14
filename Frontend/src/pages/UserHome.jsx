@@ -40,6 +40,7 @@ const UserHome = () => {
   const [fares, setFares] = useState(false);    
   const [ ride, setRide ] = useState(null)                           
   const [currentLiveLocation, setCurrentLiveLocation]= useState(false)
+  const [captainLocation, setCaptainLocation] = useState(null);
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -101,7 +102,6 @@ useEffect(()=>{
 setPickUpLocation(currentAddress)
 },[currentAddress])
 
-
   useEffect(() => {
     if (socket && user?._id) {
       socket.emit('join', {
@@ -112,6 +112,7 @@ setPickUpLocation(currentAddress)
       console.log('join event emitted for user:', user);
     }
   }, [socket, user]);
+
   useEffect(() => {
     const fetchFare = async () => {
       try {
@@ -161,6 +162,36 @@ setPickUpLocation(currentAddress)
       socket.off('ride-confirmed', handler);
     };
   }, [socket]);
+
+  useEffect(() => {
+    if (!socket) return;
+  
+    const handleLocationUpdate = ({ location }) => {
+      setCaptainLocation(location); // { lat, lng }
+    };
+  
+    socket.on('update-location-captain', handleLocationUpdate);
+  
+    return () => {
+      socket.off('update-location-captain', handleLocationUpdate);
+    };
+  }, [socket]);
+
+useEffect(() => {
+  if (!socket) return;
+
+  const handleCaptainLocation = (location) => {
+    console.log("Captain Location Updated:", location);
+    // You can either update a new marker OR setPosition if you're showing only captain's position
+    setCaptainLocation(location); // Define this in state
+  };
+
+  socket.on('captain-location', handleCaptainLocation);
+
+  return () => {
+    socket.off('captain-location', handleCaptainLocation);
+  };
+}, [socket]);
 
   const createRide = async (vehicleType) => {
     try {
@@ -404,7 +435,7 @@ setPickUpLocation(currentAddress)
   ref={mapOpacityRef}
   className="absolute inset-0 z-0"
 >
-  <LiveTracking currentLiveLocation={currentLiveLocation} setCurrentLiveLocation={setCurrentLiveLocation} setCurrentAddress={setCurrentAddress} currentAddress={currentAddress}/>
+  <LiveTracking currentLiveLocation={currentLiveLocation} setCurrentLiveLocation={setCurrentLiveLocation} setCurrentAddress={setCurrentAddress} currentAddress={currentAddress} captainLocation={captainLocation}/>
 </div>
 
       <div

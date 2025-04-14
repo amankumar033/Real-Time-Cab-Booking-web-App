@@ -42,6 +42,10 @@ function initializeSocket(server) {
                     lng: location.lng
                 }
             });
+            const user = await userModel.findById(data.riderId); // assuming riderId is sent
+  if (user?.socketId) {
+    io.to(user.socketId).emit('captain-location', location);
+  }
         });
 
         socket.on('disconnect', () => {
@@ -51,9 +55,6 @@ function initializeSocket(server) {
 }
 
 const sendMessageToSocketId = (socketId, messageObject) => {
-
-
-
     if (io) {
         io.to(socketId).emit(messageObject.event, messageObject.data);
     } else {
