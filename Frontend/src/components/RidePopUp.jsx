@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 const RidePopUp = (props) => {
   useEffect(()=>{
-console.log(props.ride)
+console.log("the ride is for this ",props.ride)
   },[props.ride])
   return (
      <div  className='mt-10 mr-4 ml-4'>
