@@ -17,40 +17,46 @@ const CaptainHome = () => {
   const popUpRef = useRef(null)
   const acceptRideRef = useRef(null)
   const [ride, setRide] = useState(null)
+  const [captainLocation, setCaptainLocation] = useState({ lat: 0, lng: 0 });
+
+
   useEffect(() => {
     console.log("capatin name",captainName.captain.fullname.firstname)
 },[]);
 
 useEffect(() => {
   if (socket && captain?.captain?._id) {
+    const captainId = captain.captain._id;
 
-    console.log("emitted one time", captain);
+    // 🛰️ Start watching the position
+    const watchId = navigator.geolocation.watchPosition(position => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
 
-    socket.emit('join', {
-      userId: captain?.captain?._id,
-      userType: 'captain'
+      const newLoc = { lat: latitude, lng: longitude };
+
+      // 🔄 Emit to server
+      socket.emit('update-location-captain', {
+        userId: captainId,
+        location: newLoc
+      });
+
+      // 🗺️ Update state
+      setCaptainLocation(newLoc);
+
+      // 🧪 Debug log
+      console.log("Live updated location:", newLoc);
     });
-    console.log('join event emitted for captain:', captain);
 
-    const updateLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          socket.emit('update-location-captain', {
-            userId: captain._id,
-            location: {
-              ltd: position.coords.latitude,
-              lng: position.coords.longitude
-            }
-          });
-        });
-      }
-    };
-
-    const locationInterval = setInterval(updateLocation, 10000);
-
-    // return () => clearInterval(locationInterval);
+    // 🧹 Clean up when component unmounts or captain/socket changes
+    return () => navigator.geolocation.clearWatch(watchId);
   }
 }, [socket, captain]);
+
+
+useEffect(()=>{
+  console.log('Location emitted:', captainLocation);
+},[captainLocation])
 useEffect(() => {
   if (!socket) return;
 
@@ -139,7 +145,7 @@ async function confirmRide() {
             <img  className='w-12 right-5 top-5 absolute z-10 bg-white p-3 rounded-full' src="/assets/logout-box-r-line.svg" alt="" />
             </Link>
             <div className='absolute z-0 inset-0 '>
-            <LiveTracking/>
+            <LiveTracking captainLocation={captainLocation}/>
             </div>
         </div >
         <div className=' absolute bg-white w-screen bottom-0 h-[38%]  pl-4 pr-4 pt-6 flex  flex-col gap-5'>
