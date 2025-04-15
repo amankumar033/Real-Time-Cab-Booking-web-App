@@ -36,4 +36,9 @@ router.post('/endride',
     body('rideId').isMongoId().withMessage('Invalid ride id'),
     rideController.endRide
 )
+router.post('/cancelride',
+    body('ride'),
+    rideController.cancelRide
+)
+
 module.exports = router;

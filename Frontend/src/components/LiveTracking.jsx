@@ -176,7 +176,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
 
   useEffect(() => {
     if (captainLocation?.lat && captainLocation?.lng) {
-      console.log("Captain Location", captainLocation);
+      // console.log("Captain Location", captainLocation);
       // Move the captain's additional marker dynamically based on distance
       const offsetLocation = calculateOffsetLocation(captainLocation, distanceInKm); // Offset by dynamic distance
       if (additionalMarkerRef.current) {

@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
 
 const RidePopUp = (props) => {
-  useEffect(()=>{
-console.log("the ride is for this ",props.ride)
-  },[props.ride])
+  useEffect(() => {
+    if (props.ride) {
+      console.log("🚖 Ride details received:", props.ride);
+    }
+  }, [props.ride]);
+  
   return (
      <div  className='mt-10 mr-4 ml-4'>
       <div className="text-xl font-bold mb-5">
@@ -38,7 +41,8 @@ console.log("the ride is for this ",props.ride)
         </div>
       </div>
       <button onClick={()=>{props.setAcceptRide(true);props.confirmRide()}} className='bg-green-500 p-2 rounded-lg  mt-4'>Accept</button>
-      <button onClick={()=>{props.setPopUp(false)}} className='bg-gray-300 p-2 rounded-lg '>Ignore</button>
+      <button onClick={()=>{props.setPopUp(false);window.location.reload();
+}} className='bg-gray-300 p-2 rounded-lg '>Ignore</button>
       </div>
     </div>
 

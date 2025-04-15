@@ -24,6 +24,9 @@ const UserHome = () => {
     destinationAddress,
     setDestinationAddress,
     confirmedRide,
+    setConfirmedRide,
+    confirmRideVehicleImg,
+    confirmedRideVehicle
   } = useRideContext();
   const{user}=useContext(UserDataContext)
   const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
@@ -38,7 +41,8 @@ const UserHome = () => {
   const [lastEditedField, setLastEditedField] = useState("");                                         
   const [fareCalculate, setFareCalculate] = useState(false);                                         
   const [fares, setFares] = useState(false);    
-  const [ ride, setRide ] = useState(null)                           
+  const [ ride, setRide ] = useState(null)         
+  const [reducedHeight, setReducedHeight]=useState(false)                  
   const [currentLiveLocation, setCurrentLiveLocation]= useState(false)
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
@@ -96,6 +100,22 @@ const UserHome = () => {
   socket.on('ridestarted', ride => {                          
     navigate('/riding', { state: { ride } }) 
 })
+useEffect(() => {
+  const handleRideCancel = (ride) => {
+    console.log("the ride is really really really really really really canceled");
+    setRidePanel(true);
+    alert('The Captain Cancelled the ride');
+    console.log("the values of confirmedRide and ridePanel are", confirmedRide, ridePanel);
+    setAcceptedRide(false);
+  };
+
+  socket.on('ride-cancel', handleRideCancel);
+
+  return () => {
+    socket.off('ride-cancel', handleRideCancel); // Clean up to avoid multiple alerts
+  };
+}, []); // empty dependency array means this only runs once when component mounts
+
 
 useEffect(()=>{
 setPickUpLocation(currentAddress)
@@ -141,10 +161,10 @@ setPickUpLocation(currentAddress)
     }
   }, [fareCalculate, currentAddress, destinationAddress]);
 
-  useEffect(() => {
-   console.log(confirmedRide)
-  }, [confirmedRide]);
 
+  useEffect(() => {
+    console.log("The confirmed ride value is", confirmedRide);
+  }, [confirmedRide]);
   useEffect(() => {
     
     if (!socket) return;
@@ -153,6 +173,7 @@ setPickUpLocation(currentAddress)
       console.log("Ride confirmed event received:", ride);
       setAcceptedRide(true);
       setRide(ride)
+      console.log("the confirmed ride ride value is",ride)
 
     };
   
@@ -330,6 +351,7 @@ setPickUpLocation(currentAddress)
         transform:'translateY(0)',
         duration:1.1,
         visibility:'visible',
+        height:'85%'
       });   
     } else {
       gsap.to(ridePanelRef.current, {
@@ -375,21 +397,20 @@ setPickUpLocation(currentAddress)
         transform:'translateY(0)',
         duration:1.1,
         visibility:'visible',
-
       });
     } else {
       gsap.to(acceptedRidePanelRef.current, {
         transform:'translateY(100%)',
         duration:1.1,
         onComplete: () => {
-          if (confirmedRidePanelRef.current) {
-            confirmedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Corrected ref
+          if (acceptedRidePanelRef.current) {
+            acceptedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Correct ref
           }
         }
       });
-      
     }
   }, [acceptedRide]);
+  
 
   return (
     <div className="h-screen overflow-hidden relative">
@@ -491,14 +512,23 @@ setPickUpLocation(currentAddress)
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[80%]" ref={ridePanelRef}>
       <div onClick={()=>{setRidePanel(false)}} className=" w-full flex items-center justify-center top-2">
-        <img className="w-8" src="/assets/arrow-down-wide-line.svg" alt="" />
       </div>
      <RideInfo createRide={createRide} /> 
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[70%]" ref={confirmedRidePanelRef}>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[73%]" ref={confirmedRidePanelRef}>
       <LookingForDriver/>
      </div>
-     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[68%]" ref={acceptedRidePanelRef}>
+     <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[74%]" ref={acceptedRidePanelRef}>
+      <img src="" alt="" />
+      <img
+            onClick={() => {            
+                  setReducedHeight(true)
+            }}
+            ref={arrowPanelCloseRef}
+            className="absolute top-6 right-6"
+            src="/assets/arrow-down-s-line.png"
+            alt=""
+          />
       <WaitingForDriver  ride={ride}/>
      </div>
     </div>

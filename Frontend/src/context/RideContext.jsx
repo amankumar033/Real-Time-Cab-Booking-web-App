@@ -8,9 +8,10 @@ export const RideProvider = ({ children }) => {
   const [currentAddress, setCurrentAddress] = useState('');
   const [destinationAddress, setDestinationAddress] = useState(null);
   const [fare, setFare] = useState(null);
-  const [confirmedRide, setConfirmedRide] = useState(false)
+  const [confirmedRide,  setConfirmedRide] = useState(false)
   const [confirmedRideVehicle, setConfirmedRideVehicle] = useState(false)
     const [finishRide, setFinishRide] = useState(false)
+    const [test, setTest] = useState(false)
   
   return (
     <RideContext.Provider

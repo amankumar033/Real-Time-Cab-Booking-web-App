@@ -3,7 +3,18 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from 'axios'
+import { useRideContext } from "../context/RideContext";
 const AcceptRide = (props) => {
+   const {
+      ridePanel,
+      setRidePanel,
+      currentAddress,
+      setCurrentAddress,
+      destinationAddress,
+      setDestinationAddress,
+      setConfirmedRide,
+      confirmedRide
+    } = useRideContext();
   const [otp, setOtp] = useState("");
   const navigate = useNavigate();
   const submitHandler = async(e) => {
@@ -21,6 +32,28 @@ const AcceptRide = (props) => {
   if (response.status === 200) {
       navigate('/captainriding', { state: { ride: props.ride } })
   }
+  };
+  console.log("the prop is",props.ride);
+  const rideCanceled = async (e) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/cancelride`, 
+        {
+          ride: props.ride, // send rideId in body
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('captainToken')}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("the ride is reaaly canceled")
+    }
+      console.log("Ride cancelled:", response.data);
+    } catch (error) {
+      console.error("Ride cancel error:", error);
+    }
+   
   };
   
   
@@ -88,12 +121,13 @@ const AcceptRide = (props) => {
             className="w-full bg-gray-200 rounded-lg py-3 px-5"
             placeholder="Enter OTP"
           />
-
           <button className="bg-green-500 py-3 rounded-lg  mt-4 w-full">
             Confirm
           </button>
         </form>
-        <button onClick={()=>{props.setAcceptRide(false); console.log(props.acceptRide)}} className='bg-red-600 p-3 rounded-lg '>Cancel</button>
+        <button onClick={()=>{rideCanceled();props.setAcceptRide(false);console.log(props.acceptRide);
+
+}} className='bg-red-600 p-3 rounded-lg '>Cancel</button>
       </div>
     </div>
   );

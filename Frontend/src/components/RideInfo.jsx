@@ -49,6 +49,9 @@ const RideInfo = (props) => {
       <button onClick={()=>{setConfirmedRide(true);
         props.createRide(confirmedRideVehicle)
       }} className='bg-green-500 p-1 rounded-lg  mt-auto'>Confirm</button>
+      <button onClick={()=>{setRidePanel(false)
+      }} className='bg-red-500 p-1 rounded-lg  mt-auto'>Cancel</button>
+
       </div>
     </div>
   );

@@ -46,6 +46,12 @@ const LookingForDriver = () => {
          <h2>Cash</h2>
          </div>
        </div>
+       <button onClick={()=>{
+        window.location.reload();
+
+       }} className='bg-red-500 w-full rounded-lg p-2 '>
+        Cancel Ride
+       </button>
       
        </div>
      </div>

@@ -21,10 +21,10 @@ function initializeSocket(server) {
 
             if (userType === 'user') {
                 await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
-                // console.log("User Socket ID Updated")
+                console.log("User Socket ID Updated")
             } else if (userType === 'captain') {
                 await captainModel.findByIdAndUpdate(userId, { socketId: socket.id });
-                // console.log("Captain Socket ID Updated")
+                console.log("Captain Socket ID Updated")
             }
         });
 
@@ -37,18 +37,22 @@ function initializeSocket(server) {
             }
         
             try {
-                console.log("Received location update from captain:", data);
+                // console.log("Received location update from captain:", data);
         
-                await captainModel.findByIdAndUpdate(userId, {
+                // Update captain's location with the correct format
+              const cpataininradius= await captainModel.findByIdAndUpdate(userId, {
                     location: {
-                        lat: location.lat,
-                        lng: location.lng,
+                        type: 'Point',  // GeoJSON type
+                        coordinates: [location.lng, location.lat]  // Correct order [longitude, latitude]
                     }
                 });
+                // console.log("the captain only which is in radius is ",cpataininradius)
+                const captainsall=await captainModel.find()
+                // console.log("bhag bsda bhag bsda bhag bsda bhag bsda",captainsall,location)
         
-                console.log(`Location updated for captain ${userId}`);
+                // console.log(`Location updated for captain ${userId}`);
         
-                // ✅ Emit to users (or a specific user based on ride info)
+                // Emit to all clients (you can adjust this to a specific user based on ride info, etc.)
                 io.emit('captain-location-update', {
                     userId,
                     location,
@@ -75,5 +79,9 @@ const sendMessageToSocketId = (socketId, messageObject) => {
         console.log('Socket.io not initialized.');
     }
 }
+const cancelride=()=>{
+    io.emit('ride-cancel');
 
-module.exports = { initializeSocket, sendMessageToSocketId };
+}
+
+module.exports = { initializeSocket, sendMessageToSocketId, cancelride };
