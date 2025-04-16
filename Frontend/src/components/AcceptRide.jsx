@@ -69,9 +69,9 @@ const AcceptRide = (props) => {
       <div className="flex">
         {
           props.heightOtpPanel?
-          <img useRef={newArrowref} onClick={()=>{props.setHeightOtpPanel(false)}} className="w-5 absolute top-0 right-42" src="/assets/up-arrow.png
+          <img ref={newArrowref} onClick={()=>{props.setHeightOtpPanel(false)}} className="w-5 absolute top-0 right-42" src="/assets/up-arrow.png
           " alt="" />
-          : <img useRef={secArrowref}
+          : <img ref={secArrowref}
           onClick={() => {
             props.setHeightOtpPanel(true)
           }}

@@ -17,7 +17,7 @@ const VehiclePanel = (props) => {
    } = useRideContext();
 
    useEffect(() => {
-    console.log("Updated Image URL:", confirmRideVehicleImg);
+    // console.log("Updated Image URL:", confirmRideVehicleImg);
   }, [confirmRideVehicleImg]);
   
   return (

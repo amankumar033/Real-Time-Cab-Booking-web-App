@@ -17,7 +17,7 @@ const LookingForDriver = () => {
        setFare
      } = useRideContext();
    useEffect(() => {
-     console.log("Updated confirm vehicle Image URL:", confirmRideVehicleImg);
+    //  console.log("Updated confirm vehicle Image URL:", confirmRideVehicleImg);
    }, [confirmRideVehicleImg]);
  
    return (

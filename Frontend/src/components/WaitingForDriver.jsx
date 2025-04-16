@@ -16,9 +16,9 @@ const WaitingForDriver = (props) => {
         fare,
         setFare
       } = useRideContext();
-    useEffect(() => {
-      console.log("Updated confirm vehicle Image URL: waiting for driver", confirmRideVehicleImg);
-    }, [confirmRideVehicleImg]);
+    // useEffect(() => {
+     // console.log("Updated confirm vehicle Image URL: waiting for driver", confirmRideVehicleImg);
+    // }, [confirmRideVehicleImg]);
   
     return (
       <div >

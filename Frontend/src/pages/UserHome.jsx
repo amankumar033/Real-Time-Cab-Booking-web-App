@@ -26,11 +26,15 @@ const UserHome = () => {
     confirmedRide,
     setConfirmedRide,
     confirmRideVehicleImg,
-    confirmedRideVehicle
+    confirmedRideVehicle,
+    WaitingForDrivers,
+    waitingForUser,
+    setWaitingForUser
+ 
   } = useRideContext();
   const{user}=useContext(UserDataContext)
   const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
-  const [ waitingForDriver, setWaitingForDriver ] = useState(false)
+
   const [pickUpLocation, setPickUpLocation] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
@@ -44,6 +48,7 @@ const UserHome = () => {
   const [ ride, setRide ] = useState(null)         
   const [reducedHeight, setReducedHeight]=useState(false)                  
   const [currentLiveLocation, setCurrentLiveLocation]= useState(false)
+  const [userPosition, setUserPosition] = useState(null);
   const panelRef = useRef(null);
   const arrowPanelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -67,7 +72,21 @@ const UserHome = () => {
   useEffect(()=>{
       console.log(user)
   },[user])
-
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      ({ coords }) => {
+        setUserPosition({
+          lat: coords.latitude,
+          lng: coords.longitude,
+        });
+      },
+      (err) => console.error('Geolocation error:', err),
+      { enableHighAccuracy: true }
+    );
+  
+    return () => navigator.geolocation.clearWatch(watchId);
+  }, []);
+  
   useEffect(() => {
     const fetchSuggestions = async (query) => {
       try {
@@ -129,7 +148,7 @@ setPickUpLocation(currentAddress)
         userType: 'user'
       });
 
-      console.log('join event emitted for user:', user);
+      // console.log('join event emitted for user:', user);
     }
   }, [socket, user]);
   useEffect(() => {
@@ -433,7 +452,14 @@ setPickUpLocation(currentAddress)
   ref={mapOpacityRef}
   className="absolute inset-0 z-0"
 >
-  <LiveTracking currentLiveLocation={currentLiveLocation} setCurrentLiveLocation={setCurrentLiveLocation} setCurrentAddress={setCurrentAddress} currentAddress={currentAddress}/>
+<LiveTracking
+  currentLiveLocation={currentLiveLocation}
+  setCurrentLiveLocation={setCurrentLiveLocation}
+  setCurrentAddress={setCurrentAddress}
+  userLocation={userPosition} // ✅ This is it
+  waitingForUser={waitingForUser}
+/>
+
 </div>
 
       <div
@@ -527,11 +553,15 @@ setPickUpLocation(currentAddress)
       <LookingForDriver/>
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[74%]" ref={acceptedRidePanelRef}>
-      {reducedHeight?<img onClick={()=>{setReducedHeight(false)}
+      {reducedHeight?<img onClick={()=>{setReducedHeight(false)
+        setWaitingForUser(true)
+      }
+
      } className="w-5 absolute right-45" src="/assets/up-arrow.png" alt="" />:<img
             onClick={() => {      
               setConfirmedRide(false)      
                   setReducedHeight(true)
+                  setWaitingForUser(true)
             }}
             className="absolute top-6 right-45"
             src="/assets/arrow-down-s-line.png"

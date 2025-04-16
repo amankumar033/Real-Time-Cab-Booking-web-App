@@ -8,11 +8,13 @@ import { CaptainDataContext } from '../context/CaptainContext';
 import { SocketContext } from "../context/SocketContext";
 import axios from "axios";
 import LiveTracking from '../components/LiveTracking';
+import { useRideContext } from '../context/RideContext';
+
 
 const CaptainHome = () => {
   const { socket } = useContext(SocketContext);
   const { captain, captainName } = useContext(CaptainDataContext);
-
+ const {waitingForDriver,setWaitingForDriver}=useRideContext()
   const [popUp, setPopUp] = useState(false);
   const [acceptRide, setAcceptRide] = useState(false);
   const [ride, setRide] = useState(null);
@@ -182,7 +184,7 @@ const CaptainHome = () => {
         />
       </Link>
       <div className="absolute z-0 inset-0">
-        <LiveTracking captainLocation={captainLocation} />
+        <LiveTracking captainLocation={captainLocation}  acceptRide={acceptRide}/>
       </div>
 
       <div className="absolute bg-white w-screen bottom-0 h-[38%] pl-4 pr-4 pt-6 flex flex-col gap-5">

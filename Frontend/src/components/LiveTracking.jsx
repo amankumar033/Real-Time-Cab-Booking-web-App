@@ -5,7 +5,7 @@ import axios from 'axios';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
+import { useRideContext } from '../context/RideContext';
 // Default icon fix
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -36,7 +36,11 @@ const usersIcon = new L.Icon({
   popupAnchor: [0, -40],
 });
 
-const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress, locationMarkerPos, captainLocation }) => {
+const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress, locationMarkerPos, captainLocation ,waitingForUser,userLocation}) => {
+  useEffect(()=>{
+console.log("the waiting for user is ",waitingForUser)
+  },[waitingForUser])
+   const {waitingForDrivers,setWaitingForDriver}=useRideContext()
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const additionalMarkerRef = useRef(null); // Reference for additional marker
@@ -45,6 +49,9 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
   const [error, setError] = useState(null);
   const [distanceInKm, setDistanceInKm] = useState(1); // Start with 50 km
 
+  useEffect(()=>{
+console.log("the waiting for driver value has now changed ", waitingForDrivers)
+  },[waitingForDrivers])
   // Auto-detect if captain based on URL
   const isCaptain = window.location.pathname.toLowerCase().includes('captain');
 
@@ -76,10 +83,17 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
     markerRef.current = marker;
 
     // Create the additional marker with dynamic offset
-    const offsetLocation = calculateOffsetLocation(position, distanceInKm); // Offset by dynamic distance
-    additionalMarkerRef.current = L.marker([offsetLocation.lat, offsetLocation.lng], {
-      icon: usersIcon, // Assuming the same icon for additional marker
-    }).addTo(map);
+    const targetOffsetLocation = isCaptain
+    ? calculateOffsetLocation(userLocation || position, distanceInKm)
+    : calculateOffsetLocation(captainLocation || position, distanceInKm);
+  
+    if (waitingForDrivers || waitingForUser) {
+      const offsetLocation = calculateOffsetLocation(position, distanceInKm); // <-- Move inside here
+      additionalMarkerRef.current = L.marker([offsetLocation.lat, offsetLocation.lng], {
+        icon: isCaptain ? userIcon : captainIcon,
+      }).addTo(map);
+    }
+    
 
     const locateButton = L.control({ position: 'bottomright' });
     locateButton.onAdd = function () {
@@ -172,18 +186,15 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
       map.remove();
       mapRef.current = null;
     };
-  }, [position, loading, locationMarkerPos, isCaptain, distanceInKm]); // Adding distanceInKm as a dependency
+  }, [position, loading, locationMarkerPos, isCaptain, distanceInKm, waitingForDrivers]); // Adding distanceInKm as a dependency
 
-  useEffect(() => {
-    if (captainLocation?.lat && captainLocation?.lng) {
-      // console.log("Captain Location", captainLocation);
-      // Move the captain's additional marker dynamically based on distance
-      const offsetLocation = calculateOffsetLocation(captainLocation, distanceInKm); // Offset by dynamic distance
-      if (additionalMarkerRef.current) {
-        additionalMarkerRef.current.setLatLng([offsetLocation.lat, offsetLocation.lng]);
-      }
-    }
-  }, [captainLocation, distanceInKm]); // Adding distanceInKm as a dependency
+useEffect(() => {
+  const target = isCaptain ? userLocation : captainLocation;
+  if (target?.lat && target?.lng && additionalMarkerRef.current) {
+    const offsetLocation = calculateOffsetLocation(target, distanceInKm);
+    additionalMarkerRef.current.setLatLng([offsetLocation.lat, offsetLocation.lng]);
+  }
+}, [captainLocation, userLocation, distanceInKm]);
 
   const reverseGeocode = async (lat, lng) => {
     try {
