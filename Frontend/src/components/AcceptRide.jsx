@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState,useRef, } from "react";
 import axios from 'axios'
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
 import { useRideContext } from "../context/RideContext";
 const AcceptRide = (props) => {
    const {
@@ -16,6 +18,9 @@ const AcceptRide = (props) => {
       confirmedRide
     } = useRideContext();
   const [otp, setOtp] = useState("");
+  const newArrowref=useRef(null)
+  const secArrowref=useRef(null)
+
   const navigate = useNavigate();
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -56,21 +61,26 @@ const AcceptRide = (props) => {
    
   };
   
-  
   return (
     <div className="mt-10 mr-4 ml-4">
       <div className="text-xl font-bold mb-5">
         <h1>Confirm this Ride to Start</h1>
       </div>
       <div className="flex">
-        <img
+        {
+          props.heightOtpPanel?
+          <img useRef={newArrowref} onClick={()=>{props.setHeightOtpPanel(false)}} className="w-5 absolute top-0 right-42" src="/assets/up-arrow.png
+          " alt="" />
+          : <img useRef={secArrowref}
           onClick={() => {
-            props.setAcceptRide(false);
+            props.setHeightOtpPanel(true)
           }}
           className="w-6 absolute top-2 left-1/2"
           src="/assets/arrow-down-wide-line.svg"
           alt=""
         />
+        }
+       
       </div>
       <div className="flex justify-between bg-amber-300 rounded-md py-2 px-3 items-center">
         <div className="flex gap-4 items-center">

@@ -51,13 +51,13 @@ module.exports.getDistanceTime = async (origin, destination) => {
 }
 
 module.exports.getAutoCompleteSuggestions = async (address) => {
+           
     if (!address) {
         throw new Error('query is required');
     }
-
-    const apiKey = process.env.GOOGLE_MAPS_API;
+    
+    const apiKey = process.env.Go_MAPS_API;
     const url = `https://maps.gomaps.pro/maps/api/place/autocomplete/json?input=${encodeURIComponent(address)}&key=${apiKey}`;
-
     try {
         const response = await axios.get(url);
         if (response.data.status === 'OK') {

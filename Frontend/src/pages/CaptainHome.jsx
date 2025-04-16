@@ -17,7 +17,7 @@ const CaptainHome = () => {
   const [acceptRide, setAcceptRide] = useState(false);
   const [ride, setRide] = useState(null);
   const [captainLocation, setCaptainLocation] = useState({ lat: 0, lng: 0 });
-
+ const [heightOtpPanel,setHeightOtpPanel]=useState(false)
   const popUpRef = useRef(null);
   const acceptRideRef = useRef(null);
 
@@ -134,7 +134,6 @@ const CaptainHome = () => {
     }
   }, [popUp]);
 
-  // GSAP animation for AcceptRide
   useGSAP(() => {
     if (acceptRide) {
       gsap.to(popUpRef.current, {
@@ -159,6 +158,18 @@ const CaptainHome = () => {
       });
     }
   }, [acceptRide]);
+  useGSAP(() => {
+    if (heightOtpPanel) {
+      gsap.to(acceptRideRef.current, {
+        height:'35%'
+      });
+    } 
+    else{
+      gsap.to(acceptRideRef.current, {
+        height:'95%'
+      });
+    }
+  }, [heightOtpPanel]);
 
   return (
     <div className="overflow-hidden h-screen relative">
@@ -170,12 +181,9 @@ const CaptainHome = () => {
           alt="logout"
         />
       </Link>
-
-
       <div className="absolute z-0 inset-0">
         <LiveTracking captainLocation={captainLocation} />
       </div>
-
 
       <div className="absolute bg-white w-screen bottom-0 h-[38%] pl-4 pr-4 pt-6 flex flex-col gap-5">
         <div className="flex justify-between">
@@ -212,10 +220,8 @@ const CaptainHome = () => {
       <div ref={popUpRef} className="bg-white absolute w-full h-[80%] bottom-0">
         <RidePopUp setPopUp={setPopUp} setAcceptRide={setAcceptRide} ride={ride} confirmRide={confirmRide} />
       </div>
-
-
-      <div ref={acceptRideRef} className="bg-white absolute w-full h-[90%] bottom-0">
-        <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide} ride={ride} setPopUp={setPopUp} />
+      <div ref={acceptRideRef} className="bg-white absolute w-full h-[95%] bottom-0">
+        <AcceptRide acceptRide={acceptRide} setAcceptRide={setAcceptRide} ride={ride} setPopUp={setPopUp} heightOtpPanel={heightOtpPanel} setHeightOtpPanel={setHeightOtpPanel}/>
       </div>
     </div>
   );

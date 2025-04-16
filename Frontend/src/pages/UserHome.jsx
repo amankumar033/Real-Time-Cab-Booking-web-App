@@ -392,24 +392,32 @@ setPickUpLocation(currentAddress)
     }
   }, [confirmedRide]);
   useGSAP(() => {
-    if (acceptedRide) {
+    if (acceptedRide && acceptedRidePanelRef.current) {
+      // Animate visibility and position
       gsap.to(acceptedRidePanelRef.current, {
-        transform:'translateY(0)',
-        duration:1.1,
-        visibility:'visible',
-      });
-    } else {
-      gsap.to(acceptedRidePanelRef.current, {
-        transform:'translateY(100%)',
-        duration:1.1,
+        transform: 'translateY(0)', 
+        duration: 1.1, 
+        visibility: 'visible', 
         onComplete: () => {
-          if (acceptedRidePanelRef.current) {
-            acceptedRidePanelRef.current.style.visibility = 'hidden'; // ✅ Correct ref
-          }
+          // Adjust height based on the reducedHeight state
+          gsap.to(acceptedRidePanelRef.current, {
+            height: reducedHeight ? '40%' : '74%',
+            duration: 0.5,
+          });
+        }
+      });
+    } else if (acceptedRidePanelRef.current) {
+      // Hide panel with a downward translation
+      gsap.to(acceptedRidePanelRef.current, {
+        transform: 'translateY(100%)',
+        duration: 1.1,
+        onComplete: () => {
+          acceptedRidePanelRef.current.style.visibility = 'hidden'; // Hide after animation
         }
       });
     }
-  }, [acceptedRide]);
+  }, [acceptedRide, reducedHeight]);
+  
   
 
   return (
@@ -519,16 +527,18 @@ setPickUpLocation(currentAddress)
       <LookingForDriver/>
      </div>
      <div className="fixed  w-full bottom-0  bg-white px-3 py-4 z-10 flex flex-col gap-3 h-[74%]" ref={acceptedRidePanelRef}>
-      <img src="" alt="" />
-      <img
-            onClick={() => {            
+      {reducedHeight?<img onClick={()=>{setReducedHeight(false)}
+     } className="w-5 absolute right-45" src="/assets/up-arrow.png" alt="" />:<img
+            onClick={() => {      
+              setConfirmedRide(false)      
                   setReducedHeight(true)
             }}
-            ref={arrowPanelCloseRef}
-            className="absolute top-6 right-6"
+            className="absolute top-6 right-45"
             src="/assets/arrow-down-s-line.png"
             alt=""
-          />
+          />}
+      
+      
       <WaitingForDriver  ride={ride}/>
      </div>
     </div>
