@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@mapbox/polyline": "^1.2.1",
     "@tailwindcss/vite": "^4.0.12",
     "axios": "^1.8.4",
     "cors-anywhere": "^0.4.4",
@@ -19,6 +20,7 @@
     "leaflet.locatecontrol": "^0.84.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.3.0",
     "remixicon": "^4.6.0",
     "socket.io-client": "^4.8.1",

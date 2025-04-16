@@ -40,5 +40,4 @@ router.post('/cancelride',
     body('ride'),
     rideController.cancelRide
 )
-
 module.exports = router;

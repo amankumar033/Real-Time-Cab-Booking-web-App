@@ -6,6 +6,8 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { useRideContext } from '../context/RideContext';
+import polyline from '@mapbox/polyline';
+
 // Default icon fix
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -37,18 +39,130 @@ const usersIcon = new L.Icon({
 });
 
 const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, setCurrentAddress, locationMarkerPos, captainLocation ,waitingForUser,userLocation}) => {
+  const [routePolyline, setRoutePolyline] = useState(null);
+
+  const polylineRef = useRef(null);
+  const [origin, setOrigin] = useState(null);
+  const [destination, setDestination] = useState(null);
+  const originRef = useRef(null);       // User's current location
+  const destinationRef = useRef(null);  // Offset marker location
+  
+  function decodePolyline(encoded) {
+    let points = [];
+    let index = 0, lat = 0, lng = 0;
+  
+    while (index < encoded.length) {
+      let b, shift = 0, result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlat = (result & 1) ? ~(result >> 1) : (result >> 1);
+      lat += dlat;
+  
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      let dlng = (result & 1) ? ~(result >> 1) : (result >> 1);
+      lng += dlng;
+  
+      points.push([lat / 1e5, lng / 1e5]);
+    }
+  
+    return points;
+  }
+  
+
+
+
+  const {waitingForDrivers,setWaitingForDriver}=useRideContext()
+
+  const getDirections = async () => {
+    if (!originRef.current || !destinationRef.current) {
+      console.log("Directions skipped: origin or destination not ready");
+      return;
+    }
+  
+    // Pass the lat, lng values directly for reverse geocoding
+    const originLatLng = { lat: originRef.current.lat, lng: originRef.current.lng };
+    const destinationLatLng = { lat: destinationRef.current.lat, lng: destinationRef.current.lng };
+  
+    try {
+      const [originAddress, destinationAddress] = await Promise.all([
+        reverseGeocode(originLatLng.lat, originLatLng.lng), // Pass lat, lng
+        reverseGeocode(destinationLatLng.lat, destinationLatLng.lng), // Pass lat, lng
+      ]);
+  
+      console.log("Origin Address:", originAddress);
+      console.log("Destination Address:", destinationAddress);
+      const testAddress='noida sector 10'
+      const response = await axios.get('http://localhost:3000/maps/get-direction', {
+        params: {
+          // origin: originAddress,
+          origin:testAddress,
+          destination: destinationAddress,
+        },
+      });
+  
+      console.log("Route response:", response.data);
+  
+      const encodedPolyline = response.data.routes[0]?.overview_polyline?.points;
+  
+      if (encodedPolyline) {
+        const decodedPoints = polyline.decode(encodedPolyline);
+        const latLngs = decodedPoints.map(([lat, lng]) => L.latLng(lat, lng));
+        setRoutePolyline(latLngs);
+  
+        // Remove previous polyline if any
+        if (polylineRef.current) {
+          mapRef.current.removeLayer(polylineRef.current);
+        }
+  
+        // Add new polyline
+        const polylineLayer = L.polyline(latLngs, { color: 'blue', weight: 5 }).addTo(mapRef.current);
+        polylineRef.current = polylineLayer;
+  
+        // Zoom to fit route
+        mapRef.current.fitBounds(polylineLayer.getBounds());
+      }
+  
+    } catch (err) {
+      setError('Error fetching directions');
+      console.error(err);
+    }
+  };
+  
+  
+  
+  useEffect(() => {
+    if (originRef.current && destinationRef.current && (waitingForDrivers || waitingForUser)) {
+      getDirections();
+    }
+  }, [originRef.current, destinationRef.current, waitingForDrivers, waitingForUser]);
+  
+  useEffect(() => {
+    if (origin && destination && (waitingForDrivers || waitingForUser)) {
+      getDirections();
+    }
+  }, [origin, destination, waitingForDrivers, waitingForUser]);
+  
+  
   useEffect(()=>{
 console.log("the waiting for user is ",waitingForUser)
   },[waitingForUser])
-   const {waitingForDrivers,setWaitingForDriver}=useRideContext()
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const additionalMarkerRef = useRef(null); // Reference for additional marker
   const [position, setPosition] = useState({ lat: 0, lng: 0 });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [distanceInKm, setDistanceInKm] = useState(1); // Start with 50 km
-
+  const [distanceInKm, setDistanceInKm] = useState(8); // Start with 50 km
+  
   useEffect(()=>{
 console.log("the waiting for driver value has now changed ", waitingForDrivers)
   },[waitingForDrivers])
@@ -133,7 +247,6 @@ console.log("the waiting for driver value has now changed ", waitingForDrivers)
             }
             if (markerRef.current) markerRef.current.setLatLng(newPos);
 
-            // Update the additional marker position dynamically with distance
             const offsetLocation = calculateOffsetLocation(newPos, distanceInKm); // Update with dynamic distance
             if (additionalMarkerRef.current) {
               additionalMarkerRef.current.setLatLng([offsetLocation.lat, offsetLocation.lng]);
@@ -196,23 +309,24 @@ useEffect(() => {
   }
 }, [captainLocation, userLocation, distanceInKm]);
 
-  const reverseGeocode = async (lat, lng) => {
-    try {
-      const res = await axios.get('https://nominatim.openstreetmap.org/reverse', {
-        params: {
-          lat,
-          lon: lng,
-          format: 'jsonv2',
-        },
-        headers: {
-          'Accept-Language': 'en',
-        },
-      });
-      return res.data.display_name || 'Address not found';
-    } catch (err) {
-      return 'Error fetching address';
-    }
-  };
+const reverseGeocode = async (lat, lng) => {
+  try {
+    const res = await axios.get('https://nominatim.openstreetmap.org/reverse', {
+      params: {
+        lat,
+        lon: lng,
+        format: 'jsonv2',
+      },
+      headers: {
+        'Accept-Language': 'en',
+      },
+    });
+    return res.data.display_name || 'Address not found';
+  } catch (err) {
+    return 'Error fetching address';
+  }
+};
+
 
   useEffect(() => {
     if (!currentLiveLocation || !setCurrentAddress || !setCurrentLiveLocation) return;
@@ -231,24 +345,20 @@ useEffect(() => {
       ({ coords }) => {
         const newPos = { lat: coords.latitude, lng: coords.longitude };
         setPosition(newPos);
-        if (markerRef.current) markerRef.current.setLatLng(newPos);
-        if (mapRef.current) {
-          const currentZoom = mapRef.current.getZoom();
-          mapRef.current.setView(newPos, currentZoom);
-        }
-
-        // Update the additional marker position with dynamic offset
-        const offsetLocation = calculateOffsetLocation(newPos, distanceInKm); // Update with dynamic distance
-        if (additionalMarkerRef.current) {
-          additionalMarkerRef.current.setLatLng([offsetLocation.lat, offsetLocation.lng]);
-        }
+        originRef.current = newPos;
+        setOrigin(newPos); // ✅
+  
+        const offsetLocation = calculateOffsetLocation(newPos, distanceInKm);
+        destinationRef.current = offsetLocation;
+        setDestination(offsetLocation); // ✅
       },
       (err) => console.error('Geolocation error:', err),
       { enableHighAccuracy: true }
     );
-
+  
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [distanceInKm]); // Adding distanceInKm as a dependency
+  }, [distanceInKm]);
+  
 
   return (
     <div
@@ -256,6 +366,8 @@ useEffect(() => {
       className="w-full h-full"
       style={{ position: 'relative' }}
     >
+  
+
       {error && <div className="error-message">{error}</div>}
     </div>
   );

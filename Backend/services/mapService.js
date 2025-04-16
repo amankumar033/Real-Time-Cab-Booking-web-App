@@ -50,6 +50,36 @@ module.exports.getDistanceTime = async (origin, destination) => {
     }
 }
 
+module.exports.getdirection = async (origin, destination) => {
+    if (!origin || !destination) {
+        throw new Error('Origin and destination are required');
+    }
+    const apiKey = process.env.GO_MAPS_API;
+    const url = `https://maps.gomaps.pro/maps/api/directions/json`;
+
+    try {
+        const response = await axios.get(url, {
+          params: {
+            origin,
+            destination,
+            key: apiKey
+          }
+        });
+  
+        // Optional: log to debug or return relevant data
+        console.log('Route response:', response.data);
+  
+        return response.data; // You’ll likely want to return `routes[0]` or similar
+      } catch (error) {
+        console.error('Error fetching directions:', error);
+        throw error;
+      }
+    }
+  
+
+
+
+
 module.exports.getAutoCompleteSuggestions = async (address) => {
            
     if (!address) {

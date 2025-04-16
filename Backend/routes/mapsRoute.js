@@ -23,6 +23,10 @@ router.get('/get-suggestions',
     mapController.getAutoCompleteSuggestions,
 
 )
+router.get('/get-direction',
+    mapController.getdirection,
+
+)
 
 
 

@@ -38,6 +38,37 @@ module.exports.getDistanceTime = async (req, res, next) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+module.exports.getdirection = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // Extract query parameters
+        const { origin, destination } = req.query;
+        
+        // Validate if from and to are present
+        if (!origin || !destination) {
+            return res.status(400).json({ message: 'Missing origin or destination' });
+        }
+
+        // Log the inputs to see what is being passed
+        console.log('From:', origin, 'To:', destination);
+
+        // Call the getroutes method with proper lat and lng
+        const direction = await mapService.getdirection(origin, destination);
+        console.log('direction Data:', direction);
+
+        res.status(200).json(direction);
+
+    } catch (err) {
+        console.error('Error:', err.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 
 module.exports.getAutoCompleteSuggestions = async (req, res, next) => {
 
