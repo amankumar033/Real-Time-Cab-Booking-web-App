@@ -20,7 +20,7 @@ const AcceptRide = (props) => {
   const [otp, setOtp] = useState("");
   const newArrowref=useRef(null)
   const secArrowref=useRef(null)
-console.log("the accepted ride value is",rideDestination,destinationAddress)
+// console.log("the accepted ride value is",rideDestination,destinationAddress)
   const navigate = useNavigate();
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ console.log("the accepted ride value is",rideDestination,destinationAddress)
       navigate('/captainriding', { state: { ride: props.ride,rideDestination } })
   }
   };
-  console.log("the prop is",props.ride);
+  // console.log("the prop is",props.ride);
   const rideCanceled = async (e) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/cancelride`, 
@@ -51,9 +51,9 @@ console.log("the accepted ride value is",rideDestination,destinationAddress)
         }
       );
       if (response.status === 200) {
-        console.log("the ride is reaaly canceled")
+        // console.log("the ride is reaaly canceled")
     }
-      console.log("Ride cancelled:", response.data);
+      // console.log("Ride cancelled:", response.data);
     } catch (error) {
       console.error("Ride cancel error:", error);
     }

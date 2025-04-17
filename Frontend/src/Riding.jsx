@@ -9,7 +9,11 @@ const Riding = (props) => {
   const { ride, rideDestination} = location.state || {}  
   const { socket } = useContext(SocketContext)
   const navigate = useNavigate()
+    
 
+  socket.on('ended-ride', ()=>{
+    navigate('/userhome')
+  })
   socket.on("ride-ended", (data) => {
       navigate('/userhome')
   })

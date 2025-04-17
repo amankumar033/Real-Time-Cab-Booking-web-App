@@ -5,17 +5,26 @@ import { useNavigate } from 'react-router-dom'
 
 
 const FinishRide = (props) => {
+  console.log(props?.ride?._id)
   const navigate = useNavigate()
-  async function endRide() {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/endride`, {
-        rideId: props.ride._id
-    }, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem('captainToken')}`
-        }
-    })
+//   async function endRide() {
+    
+//     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/endride`, {
+//         rideId: props.ride._id
+//     }, {
+//         headers: {
+//             Authorization: `Bearer ${localStorage.getItem('captainToken')}`
+//         }
+//     })
+//     if (response.status === 200) {
+//         navigate('/captainhome')
+//     }
+// }
+  async function cancelride() {
+  
+    const response = await axios.post(`http://localhost:3000/rides/endrideuser`)
     if (response.status === 200) {
-        navigate('/captainhome')
+        navigate('/captainlogin')
     }
 }
   return (
@@ -52,7 +61,7 @@ const FinishRide = (props) => {
         </div>
       </div>
       <Link to='/captainhome' >
-      <button onClick={()=>{endRide;props.setLocationMarkerPos(false) }}className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
+      <button onClick={()=>{cancelride();props.setLocationMarkerPos(false); }}className='bg-green-500 p-2 rounded-lg  mt-4 text-white w-full'>Finish Ride</button>
       </Link>
       <div className='flex w-full justify-center'>
       <p className='text-sm text-red-600'>Finish Ride! only if the destination is reached</p>

@@ -1,7 +1,7 @@
 const rideService = require('../services/rideServices');
 const { validationResult } = require('express-validator');
 const mapService = require('../services/mapService');
-const { sendMessageToSocketId,cancelride } = require('../socket');
+const { sendMessageToSocketId,cancelride ,cancelrideuser} = require('../socket');
 const rideModel = require('../models/rideModel');
 
 module.exports.createRide = async (req, res) => {
@@ -66,10 +66,10 @@ module.exports.confirmRide = async (req, res) => {
     }
 
     const { rideId } = req.body;
-  console.log("the ride id is defined as",rideId)
+//   console.log("the ride id is defined as",rideId)
     try {
         const ride = await rideService.confirmRide({ rideId, captain: req.captain });
-        console.log("the use socket id is",ride.user.socketId)
+        // console.log("the use socket id is",ride.user.socketId)
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-confirmed',
             data: ride
@@ -106,19 +106,22 @@ module.exports.startRide = async (req, res) => {
 }
 
 module.exports.endRide = async (req, res) => {
+    // console.log("reached here we hnm")
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
 
     const { rideId } = req.body;
-
+  
     try {
         const ride = await rideService.endRide({ rideId, captain: req.captain });
+        // console.log("reached here",ride)
         sendMessageToSocketId(ride.user.socketId, {
             event: 'ride-ended',
             data: ride
         })
+
 
 
 
@@ -127,19 +130,26 @@ module.exports.endRide = async (req, res) => {
         return res.status(500).json({ message: err.message });
     } 
 }
+module.exports.endrideuser = async (req, res) => {
+    // console.log("reached")
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log("no errors")}
+    try { 
+        cancelrideuser()
+        
+    } catch (err) {
+      console.log(err)
+    } 
+}
 module.exports.cancelRide = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { ride } = req.body;
-   console.log("the log of body is ",req.body)
+   
     try { 
         cancelride()
-
-
-
-
         return res.status(200).json(ride);
     } catch (err) {
         return res.status(500).json({ message: err.message });

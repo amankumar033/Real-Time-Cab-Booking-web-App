@@ -24,7 +24,7 @@ const CaptainProtectWrapper = ({ children }) => {
                     headers: { Authorization: `Bearer ${token}` }
                 });
     
-                console.log("Captain data received:", response.data.captain?.fullname?.firstname);
+                // console.log("Captain data received:", response.data.captain?.fullname?.firstname);
                 setCaptainName(response.data);
                 setCaptain(response.data);
                

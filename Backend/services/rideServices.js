@@ -49,7 +49,7 @@ module.exports.getFare = getFare;
 function getOtp(num) {
     function generateOtp(num) {
         const otp = crypto.randomInt(Math.pow(10, num - 1), Math.pow(10, num)).toString();
-        console.log("Generated OTP:", otp); 
+        // console.log("Generated OTP:", otp); 
         return otp;
     }
     return generateOtp(num);
@@ -138,9 +138,7 @@ module.exports.startRide = async ({ rideId, otp, captain }) => {
 module.exports.endRide = async ({ rideId, captain }) => {
     if (!rideId) {
         throw new Error('Ride id is required');
-    }
-
-    const ride = await rideModel.findOne({
+    }    const ride = await rideModel.findOne({
         _id: rideId,
         captain: captain._id
     }).populate('user').populate('captain').select('+otp');

@@ -22,7 +22,7 @@ const CaptainRiding = () => {
   
   useEffect(()=>{
 
-    console.log("the ride destination is",rideDestination)
+    // console.log("the ride destination is",rideDestination)
   },[rideDestination])
 
   useGSAP(() => { 

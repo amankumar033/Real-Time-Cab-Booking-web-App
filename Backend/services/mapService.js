@@ -67,7 +67,7 @@ module.exports.getdirection = async (origin, destination) => {
         });
   
         // Optional: log to debug or return relevant data
-        console.log('Route response:', response.data);
+        // console.log('Route response:', response.data);
   
         return response.data; // You’ll likely want to return `routes[0]` or similar
       } catch (error) {
@@ -102,7 +102,7 @@ module.exports.getAutoCompleteSuggestions = async (address) => {
 }
 
 module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
-    console.log("request came with",lat,lng,radius)
+    // console.log("request came with",lat,lng,radius)
     
     const captain=await captainModel.find()
     const captains = await captainModel.find({

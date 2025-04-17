@@ -83,5 +83,9 @@ const cancelride=()=>{
     io.emit('ride-cancel');
 
 }
+const cancelrideuser=()=>{
 
-module.exports = { initializeSocket, sendMessageToSocketId, cancelride };
+    io.emit('ended-ride')
+}
+
+module.exports = { initializeSocket, sendMessageToSocketId, cancelride ,cancelrideuser};

@@ -35,7 +35,7 @@ module.exports.registerCaptain = async (req, res) => {
       plate: vehicle.plate
     });
     
-    console.log("Created Captain debugging:", captain);
+    // console.log("Created Captain debugging:", captain);
     const token=await captain.generateAuthToken();
     res.status(201).json({ captain,token });
   } catch (err) {

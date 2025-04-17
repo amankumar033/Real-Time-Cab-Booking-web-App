@@ -45,7 +45,7 @@ const LiveTracking = ({ currentLiveLocation = false, setCurrentLiveLocation, set
 useEffect(() => {
   if (rideDestination && !rideDestinationRef.current) {
     rideDestinationRef.current = rideDestination;
-    console.log("the ride destination ref.current is",rideDestinationRef.current)
+    // console.log("the ride destination ref.current is",rideDestinationRef.current)
   }
 }, [rideDestination]);
 
@@ -99,17 +99,17 @@ useEffect(() => {
   const getDirections = async (rideDestination) => {
 
     if(route==='riding'||route==='captainriding'){
-      console.log("the ride detination of destination for captain is",rideDestination)
+      // console.log("the ride detination of destination for captain is",rideDestination)
       const originLatLng = { lat: originRef.current.lat, lng: originRef.current.lng };
       try {
-        console.log("reached reached at this route")
+        // console.log("reached reached at this route")
         const [originAddress] = await Promise.all([
           reverseGeocode(originLatLng.lat, originLatLng.lng), // Pass lat, lng
           // reverseGeocode(rideDestinationLatLng.lat, destinationLatLng.lng), // Pass lat, lng
         ]);
     
-        console.log("Origin Address:", originAddress);
-        console.log(" ride Destination Address:", rideDestination);
+        // console.log("Origin Address:", originAddress);
+        // console.log(" ride Destination Address:", rideDestination);
         const testAddress='noida sector 10'
         const response = await axios.get('http://localhost:3000/maps/get-direction', {
           params: {
@@ -119,7 +119,7 @@ useEffect(() => {
           },
         });
     
-        console.log("Route response:", response.data);
+        // console.log("Route response:", response.data);
     
         const encodedPolyline = response.data.routes[0]?.overview_polyline?.points;
     
@@ -160,8 +160,8 @@ else{
         reverseGeocode(destinationLatLng.lat, destinationLatLng.lng), // Pass lat, lng
       ]);
   
-      console.log("Origin Address:", originAddress);
-      console.log("Destination Address:", destinationAddress);
+      // console.log("Origin Address:", originAddress);
+      // console.log("Destination Address:", destinationAddress);
       const testAddress='noida sector 10'
       const response = await axios.get('http://localhost:3000/maps/get-direction', {
         params: {
@@ -171,7 +171,7 @@ else{
         },
       });
   
-      console.log("Route response:", response.data);
+      // console.log("Route response:", response.data);
   
       const encodedPolyline = response.data.routes[0]?.overview_polyline?.points;
   
@@ -198,26 +198,26 @@ else{
   };
   const path = window.location.pathname;
 const route = path.split("/").filter(Boolean).pop();
-console.log(route)
+// console.log(route)
 
 const forwardGeocode = async (address) => {
   try {
-    console.log("The address is: ", address);
+    // console.log("The address is: ", address);
 
     const res = await axios.get('https://us1.locationiq.com/v1/search', {
       params: {
-        key: 'pk.a5004e2d268157e1addd65baee697298',
+        // key: 'pk.a5004e2d268157e1addd65baee697298',
         q: address.trim(), // ✅ NO encodeURIComponent here
         format: 'json',
       },
     });
 
-    console.log("API Response: ", res.data);
+    // console.log("API Response: ", res.data);
 
     if (res.data && res.data.length > 0) {
       const { lat, lon } = res.data[0];
       const coordinates = { lat: parseFloat(lat), lon: parseFloat(lon) };
-      console.log("Coordinates found: ", coordinates);
+      // console.log("Coordinates found: ", coordinates);
       return coordinates;
     } else {
       throw new Error("No results found");
@@ -247,13 +247,13 @@ const forwardGeocode = async (address) => {
   }, [origin, destination, waitingForDrivers, waitingForUser]);
   
   
-  useEffect(()=>{
-console.log("the waiting for user is ",waitingForUser)
-  },[waitingForUser])
+//   useEffect(()=>{
+// console.log("the waiting for user is ",waitingForUser)
+//   },[waitingForUser])
  
-  useEffect(()=>{
-console.log("the waiting for driver value has now changed ", waitingForDrivers)
-  },[waitingForDrivers])
+//   useEffect(()=>{
+// console.log("the waiting for driver value has now changed ", waitingForDrivers)
+//   },[waitingForDrivers])
   const isCaptain = window.location.pathname.toLowerCase().includes('captain');
   const calculateOffsetLocation = (userLoc, distanceInKm = 100) => {
     // Convert kilometers to degrees
@@ -285,7 +285,7 @@ console.log("the waiting for driver value has now changed ", waitingForDrivers)
       const fetchCoordinates = async () => {
         try {
           const coordinates = await forwardGeocode(rideDestination);
-          console.log("Destination coords:", coordinates);
+          // console.log("Destination coords:", coordinates);
     
             const marker = L.marker([coordinates.lat, coordinates.lon], {
               icon:destinationIcon,

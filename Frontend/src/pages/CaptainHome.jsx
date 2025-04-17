@@ -24,7 +24,7 @@ const CaptainHome = () => {
   const acceptRideRef = useRef(null);
 
 
-  console.log("the ride testing testing ",rideDestination)
+  // console.log("the ride testing testing ",rideDestination)
  
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const CaptainHome = () => {
               // console.log("📡 Location emitted:", newLoc);
             },
             (err) => {
-              console.error("❌ Geolocation error:", err);
+              console.error(" Geolocation error:", err);
             },
             {
               enableHighAccuracy: true,
@@ -63,11 +63,11 @@ const CaptainHome = () => {
     }
   }, [socket, captain]);
 
-  useEffect(() => {
-    if (ride) {
-      console.log("🎯 Ride assigned to captain:", ride);
-    }
-  }, [ride]);
+  // useEffect(() => {
+  //   if (ride) {
+  //     console.log(" Ride assigned to captain:", ride);
+  //   }
+  // }, [ride]);
   
   useEffect(() => {
     const captainId = captain?._id || captain?.captain?._id; // <-- FIXED LINE
@@ -78,17 +78,17 @@ const CaptainHome = () => {
         userType: 'captain'
       });
   
-      console.log('✅ join event emitted for captain:', captain);
+      // console.log('join event emitted for captain:', captain);
     } else {
-      console.log("⚠️ Captain ID or socket missing:", captain, socket);
+      console.log(" Captain ID or socket missing:", captain, socket);
     }
   }, [socket, captain]);
 
   useEffect(() => {
     if (!socket) return;
-  console.log("Captain socket:", socket);
+  // console.log("Captain socket:", socket);
     const handleNewRide = (data) => {
-      console.log("🆕 New Ride Request:", data);
+      // console.log(" New Ride Request:", data);
       setRide(data);
       setPopUp(true);
     };

@@ -33,7 +33,7 @@ const UserHome = () => {
     rideDestination
  
   } = useRideContext();
-  console.log("the ride testing testing ",rideDestination)
+  // console.log("the ride testing testing ",rideDestination)
  
   const{user}=useContext(UserDataContext)
   const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
@@ -72,9 +72,9 @@ const UserHome = () => {
     setDestination("");
   };
 
-  useEffect(()=>{
-      console.log(user)
-  },[user])
+  // useEffect(()=>{
+  //     console.log(user)
+  // },[user])
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(
       ({ coords }) => {
@@ -102,7 +102,7 @@ const UserHome = () => {
           },
         });
         setSuggestions(res.data);
-        console.log("Suggestions for:", query, res.data);
+        // console.log("Suggestions for:", query, res.data);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }
@@ -124,10 +124,8 @@ const UserHome = () => {
 })
 useEffect(() => {
   const handleRideCancel = (ride) => {
-    console.log("the ride is really really really really really really canceled");
     setRidePanel(true);
     alert('The Captain Cancelled the ride');
-    console.log("the values of confirmedRide and ridePanel are", confirmedRide, ridePanel);
     setAcceptedRide(false);
   };
 
@@ -184,21 +182,21 @@ setPickUpLocation(currentAddress)
   }, [fareCalculate, currentAddress, destinationAddress]);
 
 
-  useEffect(() => {
-    console.log("The confirmed ride value is", confirmedRide);
-  }, [confirmedRide]);
+  // useEffect(() => {
+  //   console.log("The confirmed ride value is", confirmedRide);
+  // }, [confirmedRide]);
   useEffect(() => {
     
     if (!socket) return;
   
     const handler = (ride) => {
-      console.log("Ride confirmed event received:", ride);
+      // console.log("Ride confirmed event received:", ride);
       setAcceptedRide(true);
       setRide(ride)
-      console.log("the confirmed ride ride value is",ride)
+      // console.log("the confirmed ride ride value is",ride)
 
     };
-  
+
     socket.on('ride-confirmed', handler)
     return () => {
       socket.off('ride-confirmed', handler);
@@ -220,7 +218,7 @@ setPickUpLocation(currentAddress)
           },
         }
       );
-      console.log("Ride created:", response.data);
+      // console.log("Ride created:", response.data);
     } catch (err) {
       console.error("Error creating ride:", err.response?.data || err.message);
     }

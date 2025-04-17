@@ -30,7 +30,7 @@ module.exports.getDistanceTime = async (req, res, next) => {
         const { origin, destination } = req.query;
         
         const distanceTime = await mapService.getDistanceTime(origin, destination);
-          console.log(distanceTime);
+        //   console.log(distanceTime);
         res.status(200).json(distanceTime);
 
     } catch (err) {
@@ -54,11 +54,11 @@ module.exports.getdirection = async (req, res, next) => {
         }
 
         // Log the inputs to see what is being passed
-        console.log('From:', origin, 'To:', destination);
+        // console.log('From:', origin, 'To:', destination);
 
         // Call the getroutes method with proper lat and lng
         const direction = await mapService.getdirection(origin, destination);
-        console.log('direction Data:', direction);
+        // console.log('direction Data:', direction);
 
         res.status(200).json(direction);
 
