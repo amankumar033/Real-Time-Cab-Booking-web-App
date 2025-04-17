@@ -14,7 +14,7 @@ import { useRideContext } from '../context/RideContext';
 const CaptainHome = () => {
   const { socket } = useContext(SocketContext);
   const { captain, captainName } = useContext(CaptainDataContext);
- const {waitingForDriver,setWaitingForDriver}=useRideContext()
+ const {waitingForDriver,setWaitingForDriver,rideDestination,test}=useRideContext()
   const [popUp, setPopUp] = useState(false);
   const [acceptRide, setAcceptRide] = useState(false);
   const [ride, setRide] = useState(null);
@@ -23,7 +23,10 @@ const CaptainHome = () => {
   const popUpRef = useRef(null);
   const acceptRideRef = useRef(null);
 
-  // ✅ Track and emit captain location
+
+  console.log("the ride testing testing ",rideDestination)
+ 
+
   useEffect(() => {
     const captainId = captain?._id || captain?.captain?._id;
     if (socket && captainId) {
@@ -80,8 +83,6 @@ const CaptainHome = () => {
       console.log("⚠️ Captain ID or socket missing:", captain, socket);
     }
   }, [socket, captain]);
-  
-
 
   useEffect(() => {
     if (!socket) return;

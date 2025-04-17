@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, } from "react";
+import { createContext, useContext, useEffect, useState, } from "react";
 
 const RideContext = createContext();
 
@@ -11,14 +11,22 @@ export const RideProvider = ({ children }) => {
   const [confirmedRide,  setConfirmedRide] = useState(false)
   const [confirmedRideVehicle, setConfirmedRideVehicle] = useState(false)
     const [finishRide, setFinishRide] = useState(false)
-    const [test, setTest] = useState(false)
+    const [test, setTest] = useState('testing')
     const [ waitingForDrivers, setWaitingForDriver ] = useState(false)
     const [waitingForUser,setWaitingForUser]=useState(false)
+    const[rideDestination,setRideDestination]=useState('')
+    useEffect(()=>{
+      if(destinationAddress!=''){ 
+      setRideDestination(destinationAddress)
+      }
+    },[destinationAddress])
   return (
     <RideContext.Provider
       value={{
         ridePanel,
         waitingForDrivers,
+        rideDestination,
+        setRideDestination,
         setWaitingForDriver,
         setRidePanel,
         confirmRideVehicleImg,
@@ -35,6 +43,7 @@ export const RideProvider = ({ children }) => {
         setFinishRide,
         fare,
         setFare,
+        test,
         waitingForUser,
         setWaitingForUser
       }}

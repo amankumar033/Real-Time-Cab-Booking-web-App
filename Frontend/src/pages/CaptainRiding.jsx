@@ -7,12 +7,24 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import LiveTracking from '../components/LiveTracking';
 const CaptainRiding = () => {
+  const [rideDestination,setRideDestination]=useState('')
     const location = useLocation();
-  const ride = location.state?.ride;
-  const {finishRide,setFinishRide} = useRideContext()
+  const { ride} = location.state || {}  
+  const {finishRide,setFinishRide,} = useRideContext()
   const [finishRidePanel,setFinishRidePanel]=useState(true)
   const finishRideRef = useRef(null)
   const [locationMarkerPos,setLocationMarkerPos]=useState(true)
+  useEffect(() => {
+    if (ride?.destination) {
+      setRideDestination(ride.destination);
+    }
+  }, [ride]);
+  
+  useEffect(()=>{
+
+    console.log("the ride destination is",rideDestination)
+  },[rideDestination])
+
   useGSAP(() => { 
     if(finishRide){
       gsap.to(finishRideRef.current, {
@@ -56,10 +68,11 @@ const CaptainRiding = () => {
     }
    
   }, [finishRidePanel])
+          
   return (
     <div>
         <div className='absolute z-0 inset-0'>
-            <LiveTracking locationMarkerPos={locationMarkerPos}/>
+            <LiveTracking locationMarkerPos={locationMarkerPos} rideDestination={rideDestination}/>
         </div>
         <div className='flex justify-between px-8 py-10 absolute bottom-0 w-screen bg-yellow-400 items-center'>
             <h2 className='text-lg'>4 Km away</h2>

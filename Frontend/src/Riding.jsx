@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import LiveTracking from './components/LiveTracking';
 const Riding = (props) => {
   const location = useLocation();
-  const { ride } = location.state || {}  
+  const { ride, rideDestination} = location.state || {}  
   const { socket } = useContext(SocketContext)
   const navigate = useNavigate()
 
@@ -22,7 +22,7 @@ const Riding = (props) => {
             <img  className='w-12 right-5 top-5 absolute z-10 rounded-full' src="/assets/home-icon.jpeg" alt="" />
             </Link>
             <div className="h-[60vh] w-full relative z-0">
-  <LiveTracking />
+  <LiveTracking rideDestination={rideDestination}/>
 </div>
 
         </div>

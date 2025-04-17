@@ -15,12 +15,12 @@ const AcceptRide = (props) => {
       destinationAddress,
       setDestinationAddress,
       setConfirmedRide,
-      confirmedRide
+      confirmedRide,rideDestination
     } = useRideContext();
   const [otp, setOtp] = useState("");
   const newArrowref=useRef(null)
   const secArrowref=useRef(null)
-
+console.log("the accepted ride value is",rideDestination,destinationAddress)
   const navigate = useNavigate();
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -33,9 +33,8 @@ const AcceptRide = (props) => {
           Authorization: `Bearer ${localStorage.getItem('captainToken')}`
       }
   })
-
   if (response.status === 200) {
-      navigate('/captainriding', { state: { ride: props.ride } })
+      navigate('/captainriding', { state: { ride: props.ride,rideDestination } })
   }
   };
   console.log("the prop is",props.ride);

@@ -29,9 +29,12 @@ const UserHome = () => {
     confirmedRideVehicle,
     WaitingForDrivers,
     waitingForUser,
-    setWaitingForUser
+    setWaitingForUser,
+    rideDestination
  
   } = useRideContext();
+  console.log("the ride testing testing ",rideDestination)
+ 
   const{user}=useContext(UserDataContext)
   const {sendMessage, recieveMessage, socket} = useContext(SocketContext)
 
@@ -117,7 +120,7 @@ const UserHome = () => {
   }, [pickUpLocation, destination, lastEditedField]);
 
   socket.on('ridestarted', ride => {                          
-    navigate('/riding', { state: { ride } }) 
+    navigate('/riding', { state: { ride,rideDestination } }) 
 })
 useEffect(() => {
   const handleRideCancel = (ride) => {
