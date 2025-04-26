@@ -102,7 +102,7 @@ const UserHome = () => {
           },
         });
         setSuggestions(res.data);
-        // console.log("Suggestions for:", query, res.data);
+        console.log("Suggestions for:", query, res.data);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }

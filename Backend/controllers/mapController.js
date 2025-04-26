@@ -73,7 +73,7 @@ module.exports.getdirection = async (req, res, next) => {
 module.exports.getAutoCompleteSuggestions = async (req, res, next) => {
 
     try {
-
+console.log("reached till here consoling")
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });

@@ -206,7 +206,7 @@ const forwardGeocode = async (address) => {
 
     const res = await axios.get('https://us1.locationiq.com/v1/search', {
       params: {
-        // key: 'pk.a5004e2d268157e1addd65baee697298',
+        key: 'pk.a5004e2d268157e1addd65baee697298',
         q: address.trim(), // ✅ NO encodeURIComponent here
         format: 'json',
       },
@@ -443,11 +443,11 @@ const reverseGeocode = async (lat, lng) => {
         const newPos = { lat: coords.latitude, lng: coords.longitude };
         setPosition(newPos);
         originRef.current = newPos;
-        setOrigin(newPos); // ✅
+        setOrigin(newPos);
        
         const offsetLocation = calculateOffsetLocation(newPos, distanceInKm);
         destinationRef.current = offsetLocation;
-        setDestination(offsetLocation); // ✅
+        setDestination(offsetLocation); 
       },
       (err) => console.error('Geolocation error:', err),
       { enableHighAccuracy: true }
