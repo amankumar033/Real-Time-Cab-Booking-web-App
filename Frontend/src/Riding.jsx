@@ -21,7 +21,7 @@ const Riding = (props) => {
   return (
     <div className='overflow-hidden flex flex-col h-screen relative'>
         <div>
-          <img className='w-16 absolute mb-8 left-5 z-10 top-5' src="/assets/uber_logo.png" alt="" />
+          <img className='w-16 absolute mb-8 left-5 z-10 top-5' src="/assets/.png" alt="" />
            <Link to='/userhome'>
             <img  className='w-12 right-5 top-5 absolute z-10 rounded-full' src="/assets/home-icon.jpeg" alt="" />
             </Link>

@@ -12,11 +12,11 @@ const rideRoutes = require("./routes/rideRoute");
 db();
 
 const mongoose = require("mongoose");
-async function clearDatabase() {
-    await mongoose.connection.dropDatabase();
-    console.log("Database dropped.");
-}
-clearDatabase();
+// async function clearDatabase() {
+//     await mongoose.connection.dropDatabase();
+//     console.log("Database dropped.");
+// }
+// clearDatabase();
 
 
 // Middlewares

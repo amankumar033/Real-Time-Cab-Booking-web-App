@@ -205,6 +205,11 @@ setPickUpLocation(currentAddress)
 
   const createRide = async (vehicleType) => {
     try {
+      console.log("Creating ride with data:", {
+        pickup: currentAddress,
+        destination: destinationAddress,
+        vehicleType: vehicleType,
+      });
       const response = await axios.post(
         `http://localhost:3000/rides/create`,
         {
@@ -444,7 +449,7 @@ setPickUpLocation(currentAddress)
     <div className="h-screen overflow-hidden relative">
       <img
         ref={uberLogoRef}
-        className="w-16 absolute mb-8 left-5 z-10 top-5"
+        className="w-30 h-11  absolute mb-8 left-5 z-10 top-5"
         src="/assets/uber_logo.png"
         alt=""
       />

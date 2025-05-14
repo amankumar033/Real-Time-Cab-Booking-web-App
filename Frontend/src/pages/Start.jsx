@@ -8,12 +8,12 @@ const Start = () => {
 
       
         <div>
-          <img className='w-16 absolute left-5 top-5' src="assets/uber_logo.png" alt="" />
+          <img className='w-30 h-11 absolute left-5 top-5' src="assets/uber_logo.png" alt="" />
         </div>
 
         
         <div className='bg-white  p-4'>
-          <h2 className='text-2xl font-bold '>Get Started With Uber</h2>
+          <h2 className='text-2xl font-bold '>Get Started With RideSpark</h2>
           <Link to="/userLogin" className='flex items-center justify-center bg-black text-white  py-2 mt-4 mb-3 w-full rounded-lg'>Continue</Link>
         </div>
 
