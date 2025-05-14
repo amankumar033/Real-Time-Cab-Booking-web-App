@@ -5,7 +5,8 @@ A full-stack real-time cab booking platform that enables users to book cabs, tra
 
 ## 📽 Demo Video
 
-Check out the live demo here: [Watch on LinkedIn]([https://www.linkedin.com/in/your-link](https://www.linkedin.com/posts/aman-kumar-214700303_reactjs-socketio-webdevelopment-activity-7328460877681131520-Sl_8?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE2GRTABvVKmykBAmCBUrKB7QLwbuxor71k))
+Check out the live demo here: [Watch on LinkedIn](https://www.linkedin.com/posts/aman-kumar-214700303_reactjs-socketio-webdevelopment-activity-7328460877681131520-Sl_8?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE2GRTABvVKmykBAmCBUrKB7QLwbuxor71k)
+
 
 
 ## 📱 Screenshots – Real-Time Cab Booking Web App
