@@ -2,12 +2,50 @@
 
 A full-stack real-time cab booking platform that enables users to book cabs, track rides live on the map, get fare estimates, and communicate with captains. Built with MERN stack and integrated with Socket.IO for live updates.
 
-![Cab Booking Screenshot](./images/screenshot1.png)
-![Live Tracking Screenshot](./images/screenshot2.png)
 
 ## 📽 Demo Video
 
 Check out the live demo here: [Watch on LinkedIn]([https://www.linkedin.com/in/your-link](https://www.linkedin.com/posts/aman-kumar-214700303_reactjs-socketio-webdevelopment-activity-7328460877681131520-Sl_8?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE2GRTABvVKmykBAmCBUrKB7QLwbuxor71k))
+
+
+## 📱 Screenshots – Real-Time Cab Booking Web App
+
+### 🧍‍♂️ Rider Flow
+
+#### 📝 Rider Signup Page
+![Rider Signup Page](images/rider%20signup%20page.png)
+
+#### 🏠 Rider Home Page
+![Rider Home Page](images/rider%20home%20page.png)
+
+#### 🚗 Vehicle Selection Page
+![Vehicle Selection Page](images/vehicle%20selection%20page.png)
+
+#### 🗺️ Direction Page
+![Direction Page](images/direction%20page.png)
+
+#### 📋 Ride Info Page
+![Ride Info Page](images/ride%20info%20page.png)
+
+#### 🚕 Ride Pop-Up Page
+![Ride Pop-Up Page](images/ride%20pop%20up%20page.png)
+
+#### 🚘 Rider Travelling Page
+![Rider Travelling Page](images/rider%20travelling%20page.png)
+
+---
+
+### 👨‍✈️ Captain Flow
+
+#### 📝 Captain Signup Page
+![Captain Signup Page](images/captain%20signup%20page.png)
+
+#### 🏠 Captain Home Page
+![Captain Home Page](images/captain%20home%20page.png)
+
+#### 🚗 Captain Travelling Page
+![Captain Travelling Page](images/captain%20travelling%20page.png)
+
 
 ## 📦 Features
 
