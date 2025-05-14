@@ -71,7 +71,7 @@ Check out the live demo here: [Watch on LinkedIn](https://www.linkedin.com/posts
 ### 📁 Clone the repository
 
 bash
-git clone https://github.com/your-username/cab-booking-app.git
+git clone https://github.com/amankumar033/Real-Time-Cab-Booking-web-App.git
 cd cab-booking-app
 
 
@@ -91,6 +91,6 @@ npm start
 
 🧠 Author
 Aman Kumar
-🔗 linkedin.com/in/aman-kumar-214700303
+🔗 [LinkedIn – Aman Kumar](https://www.linkedin.com/in/aman-kumar-214700303)
 📧 Email: amankumar51462@email.com
 
