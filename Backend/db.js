@@ -6,6 +6,4 @@ mongoose.connect(`${process.env.MONGODB_URL}/uber`)
     console.log("DB connected")
 })
 .catch(function(err){
-    console.log(err)
-})}
-module.exports=connectToDb;
+ 
